@@ -1,4 +1,5 @@
-import puppeteer from 'puppeteer'
+// Note: Puppeteer is not supported inside Cloudflare Workers isolates.
+// Dynamic import is used to prevent edge build failures.
 export interface CertificateData {
   participantName: string
   programName: string
@@ -184,6 +185,14 @@ export async function generateCertificatePdf(data: CertificateData): Promise<Uin
     </main>
 </body>
 </html>`
+
+  let puppeteer: any
+  try {
+    // @ts-ignore
+    puppeteer = (await import('puppeteer')).default || (await import('puppeteer'))
+  } catch {
+    throw new Error('Puppeteer is not installed or supported in this runtime environment.')
+  }
 
   const browser = await puppeteer.launch({
     headless: true,
