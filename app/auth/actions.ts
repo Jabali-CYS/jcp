@@ -35,6 +35,23 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   try {
+    const rawUrl = getServerEnv('NEXT_PUBLIC_SUPABASE_URL')
+    let supabaseHost = 'missing'
+    try {
+      if (rawUrl) {
+        supabaseHost = new URL(rawUrl).hostname
+      } else {
+        supabaseHost = 'fallback:placeholder'
+      }
+    } catch {
+      supabaseHost = 'invalid_url'
+    }
+
+    const anonAvailable = Boolean(getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY'))
+    const serviceRoleAvailable = Boolean(getServerEnv('SUPABASE_SERVICE_ROLE_KEY'))
+
+    console.log(`[AUTH_DIAG] supabase_host=${supabaseHost} anon_key_available=${anonAvailable} service_role_available=${serviceRoleAvailable}`)
+
     const supabase = await createClient()
 
     const email = formData.get('email') as string
@@ -51,6 +68,7 @@ export async function signup(formData: FormData) {
     })
 
     if (error) {
+      console.error(`[AUTH_DIAG] error.name=${error.name} error.message=${error.message} error.status=${(error as any).status} error.code=${(error as any).code}`)
       return { error: error.message }
     }
 
@@ -87,7 +105,7 @@ export async function signup(formData: FormData) {
     if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
-    console.error('Signup action exception:', error)
+    console.error(`[AUTH_DIAG] exception.name=${error?.name} exception.message=${error?.message} exception.status=${error?.status} exception.code=${error?.code}`)
     return { error: error?.message || 'حدث خطأ أثناء إنشاء الحساب' }
   }
 }
