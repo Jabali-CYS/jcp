@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { getServerEnv } from './env'
 
 /**
  * Supabase client for use in Server Components, Server Actions, and Route Handlers.
@@ -8,8 +9,8 @@ import { cookies } from 'next/headers'
 export async function createClient() {
   const cookieStore = await cookies()
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+  const supabaseUrl = getServerEnv('NEXT_PUBLIC_SUPABASE_URL') || 'https://placeholder.supabase.co'
+  const supabaseAnonKey = getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY') || 'placeholder-key'
 
   return createServerClient(
     supabaseUrl,
