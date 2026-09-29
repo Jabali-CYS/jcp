@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-jcp-navy: #0D2040;
+  --color-jcp-green: #007A3D;
+  --color-jcp-red: #CE1126;
+  --color-jcp-gold: #C8A65E;
+  
+  --font-readex: var(--font-readex-pro), sans-serif;
+  --font-almarai: var(--font-almarai), sans-serif;
+}
+
+@layer base {
+  body {
+    direction: rtl;
+  }
+}
