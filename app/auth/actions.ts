@@ -15,10 +15,30 @@ export async function login(formData: FormData) {
       password: formData.get('password') as string,
     }
 
+    if (!data.email || !data.password) {
+      return { error: 'يرجى إدخال البريد الإلكتروني وكلمة المرور' }
+    }
+
     const { error } = await supabase.auth.signInWithPassword(data)
 
     if (error) {
-      return { error: 'بيانات الدخول غير صحيحة، يرجى التحقق والمحاولة مجدداً' }
+      const msg = error.message?.toLowerCase() || ''
+      const code = (error as any).code || ''
+      const status = (error as any).status
+
+      if (code === 'email_not_confirmed' || msg.includes('email not confirmed')) {
+        return { error: 'البريد الإلكتروني لم يتم تأكيده بعد. يرجى مراجعة بريدك الإلكتروني لتفعيل الحساب.' }
+      }
+
+      if (code === 'invalid_credentials' || msg.includes('invalid login credentials')) {
+        return { error: 'بيانات الدخول غير صحيحة، يرجى التحقق من البريد الإلكتروني وكلمة المرور.' }
+      }
+
+      if (status === 429 || code === 'over_request_rate_limit' || code === 'over_email_send_rate_limit' || msg.includes('rate limit')) {
+        return { error: 'تم تجاوز الحد المسموح به من المحاولات، يرجى الانتظار قليلاً قبل المحاولة مجدداً.' }
+      }
+
+      return { error: 'حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة لاحقاً.' }
     }
 
     revalidatePath('/', 'layout')
@@ -29,64 +49,12 @@ export async function login(formData: FormData) {
       throw error
     }
     console.error('Login action exception:', error)
-    return { error: error?.message || 'حدث خطأ غير متوقع أثناء تسجيل الدخول' }
+    return { error: 'حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة لاحقاً.' }
   }
 }
 
 export async function signup(formData: FormData) {
   try {
-    const rawUrl = getServerEnv('NEXT_PUBLIC_SUPABASE_URL')
-    let supabaseHost = 'missing'
-    try {
-      if (rawUrl) {
-        supabaseHost = new URL(rawUrl).hostname
-      } else {
-        supabaseHost = 'fallback:placeholder'
-      }
-    } catch {
-      supabaseHost = 'invalid_url'
-    }
-
-    const anonAvailable = Boolean(getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY'))
-    const serviceRoleAvailable = Boolean(getServerEnv('SUPABASE_SERVICE_ROLE_KEY'))
-
-    console.log(`[AUTH_DIAG] supabase_host=${supabaseHost} anon_key_available=${anonAvailable} service_role_available=${serviceRoleAvailable}`)
-
-    // Probe 1: GET /auth/v1/health
-    try {
-      const hRes = await fetch(`${rawUrl}/auth/v1/health`, {
-        headers: { 'apikey': getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY') || '' }
-      })
-      const hText = await hRes.text()
-      const hRay = hRes.headers.get('cf-ray') || 'none'
-      const hServer = hRes.headers.get('server') || 'none'
-      const hType = hRes.headers.get('content-type') || 'none'
-      const hCode = (hText.match(/error code:\s*(\d+)/i) || hText.match(/error\s+(\d{4})/i))?.[1] || 'none'
-      console.log(`[PROBE_HEALTH] status=${hRes.status} cf_code=${hCode} cf_ray=${hRay} server=${hServer} content_type=${hType} body=${hText.slice(0, 150)}`)
-    } catch (hErr: any) {
-      console.error(`[PROBE_HEALTH] exception=${hErr?.message}`)
-    }
-
-    // Probe 2: POST /auth/v1/signup with safe empty payload (cannot create user)
-    try {
-      const sRes = await fetch(`${rawUrl}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'apikey': getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY') || '',
-          'Content-Type': 'application/json',
-        },
-        body: '{}',
-      })
-      const sText = await sRes.text()
-      const sRay = sRes.headers.get('cf-ray') || 'none'
-      const sServer = sRes.headers.get('server') || 'none'
-      const sType = sRes.headers.get('content-type') || 'none'
-      const sCode = (sText.match(/error code:\s*(\d+)/i) || sText.match(/error\s+(\d{4})/i))?.[1] || 'none'
-      console.log(`[PROBE_SIGNUP] status=${sRes.status} cf_code=${sCode} cf_ray=${sRay} server=${sServer} content_type=${sType} body=${sText.slice(0, 300).replace(/\s+/g, ' ')}`)
-    } catch (sErr: any) {
-      console.error(`[PROBE_SIGNUP] exception=${sErr?.message}`)
-    }
-
     const supabase = await createClient()
 
     const email = formData.get('email') as string
@@ -103,7 +71,13 @@ export async function signup(formData: FormData) {
     })
 
     if (error) {
-      console.error(`[AUTH_DIAG] error.name=${error.name} error.message=${error.message} error.status=${(error as any).status} error.code=${(error as any).code}`)
+      const msg = error.message?.toLowerCase() || ''
+      const code = (error as any).code || ''
+      const status = (error as any).status
+
+      if (status === 429 || code === 'over_email_send_rate_limit' || msg.includes('rate limit')) {
+        return { error: 'تم تجاوز الحد المسموح به لإرسال رسائل التأكيد، يرجى الانتظار قليلاً قبل إعادة المحاولة.' }
+      }
       return { error: error.message }
     }
 
@@ -140,7 +114,7 @@ export async function signup(formData: FormData) {
     if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
-    console.error(`[AUTH_DIAG] exception.name=${error?.name} exception.message=${error?.message} exception.status=${error?.status} exception.code=${error?.code}`)
+    console.error('Signup action exception:', error)
     return { error: error?.message || 'حدث خطأ أثناء إنشاء الحساب' }
   }
 }
