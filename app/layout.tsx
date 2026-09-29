@@ -30,6 +30,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${readexPro.variable} ${almarai.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "if(typeof window!=='undefined'&&!window.__name){window.__name=function(t){return t};}if(typeof globalThis!=='undefined'&&!globalThis.__name){globalThis.__name=function(t){return t};}",
+          }}
+        />
+      </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col font-readex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
         <LanguageProvider>
           <ThemeProvider>

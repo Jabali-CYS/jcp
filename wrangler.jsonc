@@ -2,6 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "jcp",
+	"keep_names": false,
 	"compatibility_date": "2026-09-29",
 	"compatibility_flags": [
 		"nodejs_compat",
