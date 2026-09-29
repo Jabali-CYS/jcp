@@ -1,0 +1,7 @@
+name = "jcpacademy"
+main = ".worker-next/index.mjs"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY will be injected here during deployment or set via dashboard.

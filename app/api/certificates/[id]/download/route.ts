@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { generateCertificatePdf, CertificateData } from '@/lib/pdf/generator'
-
-function sanitizeFilename(name: string): string {
-  return name.replace(/[/\\?%*:|"<>]/g, '-').replace(/\s+/g, '_')
-}
+// import { createClient } from '@/lib/supabase/server'
+// import { generateCertificatePdf, CertificateData } from '@/lib/pdf/generator'
 
 export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Cloudflare Workers Conference Deployment
+  // PDF generation is deferred.
+  return NextResponse.json(
+    { error: 'PDF generation is temporarily unavailable on the conference deployment.' },
+    { status: 501 }
+  )
+}
+
+/* 
+// --- PRESERVED ORIGINAL IMPLEMENTATION ---
+function sanitizeFilename(name: string): string {
+  return name.replace(/[\/\\?%*:|"<>]/g, '-').replace(/\s+/g, '_')
+}
+
+export async function GET_ORIGINAL(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -88,3 +102,4 @@ export async function GET(
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }
+*/
