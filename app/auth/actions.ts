@@ -52,6 +52,41 @@ export async function signup(formData: FormData) {
 
     console.log(`[AUTH_DIAG] supabase_host=${supabaseHost} anon_key_available=${anonAvailable} service_role_available=${serviceRoleAvailable}`)
 
+    // Probe 1: GET /auth/v1/health
+    try {
+      const hRes = await fetch(`${rawUrl}/auth/v1/health`, {
+        headers: { 'apikey': getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY') || '' }
+      })
+      const hText = await hRes.text()
+      const hRay = hRes.headers.get('cf-ray') || 'none'
+      const hServer = hRes.headers.get('server') || 'none'
+      const hType = hRes.headers.get('content-type') || 'none'
+      const hCode = (hText.match(/error code:\s*(\d+)/i) || hText.match(/error\s+(\d{4})/i))?.[1] || 'none'
+      console.log(`[PROBE_HEALTH] status=${hRes.status} cf_code=${hCode} cf_ray=${hRay} server=${hServer} content_type=${hType} body=${hText.slice(0, 150)}`)
+    } catch (hErr: any) {
+      console.error(`[PROBE_HEALTH] exception=${hErr?.message}`)
+    }
+
+    // Probe 2: POST /auth/v1/signup with safe empty payload (cannot create user)
+    try {
+      const sRes = await fetch(`${rawUrl}/auth/v1/signup`, {
+        method: 'POST',
+        headers: {
+          'apikey': getServerEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY') || '',
+          'Content-Type': 'application/json',
+        },
+        body: '{}',
+      })
+      const sText = await sRes.text()
+      const sRay = sRes.headers.get('cf-ray') || 'none'
+      const sServer = sRes.headers.get('server') || 'none'
+      const sType = sRes.headers.get('content-type') || 'none'
+      const sCode = (sText.match(/error code:\s*(\d+)/i) || sText.match(/error\s+(\d{4})/i))?.[1] || 'none'
+      console.log(`[PROBE_SIGNUP] status=${sRes.status} cf_code=${sCode} cf_ray=${sRay} server=${sServer} content_type=${sType} body=${sText.slice(0, 300).replace(/\s+/g, ' ')}`)
+    } catch (sErr: any) {
+      console.error(`[PROBE_SIGNUP] exception=${sErr?.message}`)
+    }
+
     const supabase = await createClient()
 
     const email = formData.get('email') as string
