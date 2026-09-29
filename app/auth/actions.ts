@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getServerEnv } from '@/lib/supabase/env'
 
 export async function login(formData: FormData) {
   try {
@@ -55,7 +56,7 @@ export async function signup(formData: FormData) {
 
     if (data.user) {
       try {
-        if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
           const adminClient = createAdminClient()
           await adminClient.from('profiles').insert({
             id: data.user.id,
