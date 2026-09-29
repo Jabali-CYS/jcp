@@ -6,81 +6,101 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function login(formData: FormData) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  // type-casting here for simplicity
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    const data = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    }
+
+    const { error } = await supabase.auth.signInWithPassword(data)
+
+    if (error) {
+      return { error: 'بيانات الدخول غير صحيحة، يرجى التحقق والمحاولة مجدداً' }
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/dashboard')
+  } catch (error: any) {
+    // If it's a Next.js redirect, rethrow it so navigation succeeds
+    if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
+    console.error('Login action exception:', error)
+    return { error: error?.message || 'حدث خطأ غير متوقع أثناء تسجيل الدخول' }
   }
-
-  const { error } = await supabase.auth.signInWithPassword(data)
-
-  if (error) {
-    return { error: 'Invalid login credentials' }
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const fullName = formData.get('fullName') as string
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const fullName = formData.get('fullName') as string
 
-  if (!email || !password || !fullName) {
-    return { error: 'All fields are required' }
-  }
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  })
-
-  if (error) {
-    return { error: error.message }
-  }
-
-  if (data.user) {
-    const adminClient = createAdminClient()
-
-    // 1. Create the profile securely
-    const { error: profileError } = await adminClient
-      .from('profiles')
-      .insert({
-        id: data.user.id,
-        full_name: fullName,
-      })
-
-    if (profileError) {
-      console.error('Error creating profile:', profileError)
-      // Note: In a production app, you might want to handle rollback or retry
+    if (!email || !password || !fullName) {
+      return { error: 'جميع الحقول مطلوبة' }
     }
 
-    // 2. Assign the default role (trainee) securely
-    // Client cannot override this because it's hardcoded on the server
-    const { error: roleError } = await adminClient
-      .from('user_roles')
-      .insert({
-        user_id: data.user.id,
-        role: 'trainee',
-      })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
 
-    if (roleError) {
-      console.error('Error assigning role:', roleError)
+    if (error) {
+      return { error: error.message }
     }
-  }
 
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
+    if (data.user) {
+      try {
+        if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          const adminClient = createAdminClient()
+          await adminClient.from('profiles').insert({
+            id: data.user.id,
+            full_name: fullName,
+          })
+          await adminClient.from('user_roles').insert({
+            user_id: data.user.id,
+            role: 'trainee',
+          })
+        } else {
+          await supabase.from('profiles').insert({
+            id: data.user.id,
+            full_name: fullName,
+          })
+          await supabase.from('user_roles').insert({
+            user_id: data.user.id,
+            role: 'trainee',
+          })
+        }
+      } catch (profileErr) {
+        console.warn('Profile/role assignment notice:', profileErr)
+      }
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/dashboard')
+  } catch (error: any) {
+    if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
+    console.error('Signup action exception:', error)
+    return { error: error?.message || 'حدث خطأ أثناء إنشاء الحساب' }
+  }
 }
 
 export async function logout() {
-  const supabase = await createClient()
-  await supabase.auth.signOut()
-  revalidatePath('/', 'layout')
-  redirect('/')
+  try {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    revalidatePath('/', 'layout')
+    redirect('/')
+  } catch (error: any) {
+    if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
+    console.error('Logout error:', error)
+  }
 }
