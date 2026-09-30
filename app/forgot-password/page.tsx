@@ -2,33 +2,31 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, UserPlus, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Mail, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
-import { signup } from '@/app/auth/actions';
+import { forgotPassword } from '@/app/auth/actions';
 
-export default function RegisterPage() {
-  const [fullName, setFullName] = useState('');
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isLoading) return; // prevent double submit
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
-    
+
     const formData = new FormData(e.currentTarget);
-    const result = await signup(formData);
-    
+    const result = await forgotPassword(formData);
+
     if (result?.error) {
       setError(result.error);
       setIsLoading(false);
-    } else if (result?.emailConfirmationRequired) {
-      setSuccessMessage(result.message || 'تم إنشاء الحساب بنجاح! يرجى مراجعة بريدك الإلكتروني لتأكيد الحساب قبل تسجيل الدخول.');
+    } else if (result?.success) {
+      setSuccessMessage(result.message || 'تم إرسال رابط استعادة كلمة المرور بنجاح.');
       setIsLoading(false);
     }
   };
@@ -43,10 +41,10 @@ export default function RegisterPage() {
       >
         <div>
           <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900 dark:text-white font-kufi">
-            إنشاء حساب جديد
+            استعادة كلمة المرور
           </h2>
           <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400 font-cairo">
-            انضم إلينا في الأكاديمية الحزبية
+            أدخل بريدك الإلكتروني المسجل وسنرسل لك رابطاً لإعادة تعيين كلمة المرور
           </p>
         </div>
 
@@ -62,7 +60,7 @@ export default function RegisterPage() {
             <div className="p-4 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-xl flex items-start gap-3 font-cairo">
               <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold mb-1">تم إنشاء الحساب بنجاح!</p>
+                <p className="font-bold mb-1">تم إرسال الطلب بنجاح</p>
                 <p className="text-gray-600 dark:text-gray-300">{successMessage}</p>
               </div>
             </div>
@@ -73,34 +71,13 @@ export default function RegisterPage() {
                 className="inline-flex items-center gap-2 text-sm font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400"
               >
                 <ArrowRight className="w-4 h-4" />
-                الانتقال إلى صفحة تسجيل الدخول
+                العودة إلى صفحة تسجيل الدخول
               </Link>
             </div>
           </div>
         ) : (
-          <form className="mt-8 space-y-6" onSubmit={handleRegister}>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-cairo mb-1">
-                  الاسم الرباعي
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    name="fullName"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-transparent dark:text-white transition-colors"
-                    placeholder="الاسم الكامل"
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-cairo mb-1">
                   البريد الإلكتروني
@@ -122,32 +99,6 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-cairo mb-1">
-                  كلمة المرور
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="password"
-                    name="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-transparent dark:text-white transition-colors"
-                    placeholder="••••••••"
-                    dir="ltr"
-                    minLength={8}
-                    disabled={isLoading}
-                  />
-                </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 font-cairo">
-                  8 أحرف كحد أدنى
-                </p>
-              </div>
             </div>
 
             <div>
@@ -159,22 +110,22 @@ export default function RegisterPage() {
                 {isLoading ? (
                   <div className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
                 ) : (
-                  <span className="flex items-center gap-2">
-                    <UserPlus className="h-5 w-5" />
-                    إنشاء حساب
-                  </span>
+                  <span>إرسال رابط الاستعادة</span>
                 )}
               </button>
             </div>
+
+            <div className="text-center font-cairo text-sm">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1 font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
+              >
+                <ArrowRight className="w-4 h-4" />
+                العودة إلى تسجيل الدخول
+              </Link>
+            </div>
           </form>
         )}
-
-        <div className="mt-6 text-center font-cairo text-sm text-gray-600 dark:text-gray-400">
-          لديك حساب بالفعل؟{' '}
-          <Link href="/login" className="font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400">
-            سجل دخولك
-          </Link>
-        </div>
       </motion.div>
     </div>
   );

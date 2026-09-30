@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
       return { error: 'يرجى إدخال البريد الإلكتروني وكلمة المرور' }
     }
 
-    const { error } = await supabase.auth.signInWithPassword(data)
+    const { data: authData, error } = await supabase.auth.signInWithPassword(data)
 
     if (error) {
       const msg = error.message?.toLowerCase() || ''
@@ -41,10 +41,36 @@ export async function login(formData: FormData) {
       return { error: 'حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة لاحقاً.' }
     }
 
+    // Self-healing check: Ensure authenticated user has a profile and trainee role
+    if (authData?.user) {
+      try {
+        const userId = authData.user.id
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', userId)
+          .maybeSingle()
+
+        if (!existingProfile && getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
+          const adminClient = createAdminClient()
+          const fullName = authData.user.user_metadata?.full_name || 'المتدرب'
+          await adminClient.from('profiles').insert({
+            id: userId,
+            full_name: fullName,
+          })
+          await adminClient.from('user_roles').insert({
+            user_id: userId,
+            role: 'trainee',
+          })
+        }
+      } catch (healingErr) {
+        console.warn('Profile/role self-healing notice:', healingErr)
+      }
+    }
+
     revalidatePath('/', 'layout')
     redirect('/dashboard')
   } catch (error: any) {
-    // If it's a Next.js redirect, rethrow it so navigation succeeds
     if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
@@ -65,9 +91,18 @@ export async function signup(formData: FormData) {
       return { error: 'جميع الحقول مطلوبة' }
     }
 
+    if (password.length < 8) {
+      return { error: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' }
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
     })
 
     if (error) {
@@ -82,17 +117,21 @@ export async function signup(formData: FormData) {
     }
 
     if (data.user) {
+      let adminClient: ReturnType<typeof createAdminClient> | null = null
       try {
         if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
-          const adminClient = createAdminClient()
-          await adminClient.from('profiles').insert({
+          adminClient = createAdminClient()
+          const { error: pErr } = await adminClient.from('profiles').insert({
             id: data.user.id,
             full_name: fullName,
           })
-          await adminClient.from('user_roles').insert({
+          if (pErr) throw pErr
+
+          const { error: rErr } = await adminClient.from('user_roles').insert({
             user_id: data.user.id,
             role: 'trainee',
           })
+          if (rErr) throw rErr
         } else {
           await supabase.from('profiles').insert({
             id: data.user.id,
@@ -103,8 +142,26 @@ export async function signup(formData: FormData) {
             role: 'trainee',
           })
         }
-      } catch (profileErr) {
-        console.warn('Profile/role assignment notice:', profileErr)
+      } catch (profileErr: any) {
+        console.error('Transactional rollback during signup:', profileErr)
+        // Rollback Auth user if profile or role creation fails
+        if (adminClient && data.user.id) {
+          try {
+            await adminClient.auth.admin.deleteUser(data.user.id)
+          } catch (rollbackErr) {
+            console.error('Rollback failure:', rollbackErr)
+          }
+        }
+        return { error: 'حدث خطأ أثناء إعداد الحساب، يرجى المحاولة مجدداً لاحقاً.' }
+      }
+
+      // Check if email confirmation is required (session is null)
+      if (!data.session) {
+        return {
+          success: true,
+          emailConfirmationRequired: true,
+          message: 'تم إنشاء الحساب بنجاح! يرجى مراجعة بريدك الإلكتروني لتأكيد الحساب قبل تسجيل الدخول.',
+        }
       }
     }
 
@@ -119,12 +176,93 @@ export async function signup(formData: FormData) {
   }
 }
 
+export async function forgotPassword(formData: FormData) {
+  try {
+    const supabase = await createClient()
+    const email = (formData.get('email') as string)?.trim()
+
+    if (!email) {
+      return { error: 'يرجى إدخال البريد الإلكتروني' }
+    }
+
+    const origin = getServerEnv('NEXT_PUBLIC_SITE_URL') || 'https://jcp.ahmadjabali-2014.workers.dev'
+    const redirectTo = `${origin}/auth/callback?next=/update-password`
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    })
+
+    if (error) {
+      const status = (error as any).status
+      const code = (error as any).code || ''
+      const msg = error.message?.toLowerCase() || ''
+
+      if (status === 429 || code === 'over_email_send_rate_limit' || msg.includes('rate limit')) {
+        return { error: 'تم تجاوز الحد المسموح به لإرسال الرسائل، يرجى الانتظار قليلاً قبل المحاولة مجدداً.' }
+      }
+
+      console.error('Reset password notice:', error.message)
+    }
+
+    // Always return safe success to prevent user enumeration
+    return {
+      success: true,
+      message: 'إذا كان البريد مسجلاً لدينا، فستصلك رسالة تحتوي على رابط استعادة كلمة المرور.',
+    }
+  } catch (error: any) {
+    console.error('Forgot password exception:', error)
+    return { error: 'حدث خطأ أثناء معالجة الطلب، يرجى المحاولة لاحقاً.' }
+  }
+}
+
+export async function updatePassword(formData: FormData) {
+  try {
+    const supabase = await createClient()
+
+    const password = formData.get('password') as string
+    const confirmPassword = formData.get('confirmPassword') as string
+
+    if (!password || !confirmPassword) {
+      return { error: 'جميع الحقول مطلوبة' }
+    }
+
+    if (password.length < 8) {
+      return { error: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' }
+    }
+
+    if (password !== confirmPassword) {
+      return { error: 'كلمتا المرور غير متطابقتين' }
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password,
+    })
+
+    if (error) {
+      const msg = error.message?.toLowerCase() || ''
+      if (msg.includes('auth session missing') || msg.includes('jwt')) {
+        return { error: 'انتهت صلاحية جلسة استعادة كلمة المرور. يرجى طلب رابط جديد.' }
+      }
+      return { error: error.message || 'فشل تحديث كلمة المرور، يرجى المحاولة مجدداً.' }
+    }
+
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch (error: any) {
+    if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
+    console.error('Update password exception:', error)
+    return { error: 'حدث خطأ أثناء تحديث كلمة المرور، يرجى المحاولة لاحقاً.' }
+  }
+}
+
 export async function logout() {
   try {
     const supabase = await createClient()
     await supabase.auth.signOut()
     revalidatePath('/', 'layout')
-    redirect('/')
+    redirect('/login')
   } catch (error: any) {
     if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error

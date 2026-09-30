@@ -40,10 +40,12 @@ export async function updateSession(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
 
-    const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
+    const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || 
+      request.nextUrl.pathname.startsWith('/register') || 
+      request.nextUrl.pathname.startsWith('/forgot-password')
     
     // Basic route protection
-    const protectedRoutes = ['/admin', '/dashboard', '/profile']
+    const protectedRoutes = ['/admin', '/dashboard', '/profile', '/trainer']
     const isProtectedRoute = protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path))
 
     if (!user && isProtectedRoute) {
