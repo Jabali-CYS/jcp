@@ -5,6 +5,9 @@ import { academyInfo, operationalTargets, trainingPackages } from "@/data/mock";
 import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { HeroImageRotator } from "@/components/HeroImageRotator";
+import { UpcomingTicker } from "@/components/UpcomingTicker";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { TimelineSection } from "@/components/TimelineSection";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -45,6 +48,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Live Upcoming Events & Registration Ticker */}
+      <UpcomingTicker isAr={isAr} />
+
       {/* Hero Section */}
       <section className="relative bg-jcp-navy text-white overflow-hidden border-b-4 border-jcp-red">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
@@ -206,12 +212,16 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {trainingPackages.slice(0, 6).map((pkg) => (
-              <div key={pkg.id} className="bg-white dark:bg-slate-900 p-6 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-jcp-gold dark:hover:border-jcp-gold hover:shadow-md transition-all group flex items-start gap-4">
-                <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-md text-jcp-navy dark:text-white group-hover:bg-jcp-gold group-hover:text-white transition-colors">
+              <div 
+                key={pkg.id} 
+                className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-jcp-gold/60 dark:hover:border-jcp-gold/60 shadow-sm hover:shadow-xl hover:shadow-jcp-gold/5 transform hover:-translate-y-1.5 hover:ring-2 hover:ring-jcp-gold/20 transition-all duration-300 group flex items-start gap-4 relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-jcp-gold/10 to-transparent rounded-bl-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-xl text-jcp-navy dark:text-white group-hover:bg-jcp-gold group-hover:text-navy-950 transition-all shadow-sm shrink-0">
                   <BookOpen size={24} />
                 </div>
-                <div>
-                  <h3 className="font-bold text-jcp-navy dark:text-white font-almarai mb-1 group-hover:text-jcp-red transition-colors">{isAr ? pkg.title : pkg.titleEn}</h3>
+                <div className="flex-1">
+                  <h3 className="font-bold text-jcp-navy dark:text-white font-almarai mb-1 group-hover:text-jcp-gold transition-colors">{isAr ? pkg.title : pkg.titleEn}</h3>
                   <div className="text-sm text-slate-500 dark:text-slate-400 font-almarai">{t.slideRange} <span className="font-semibold text-slate-700 dark:text-slate-300">{pkg.slideRange ? `${pkg.slideRange.from}–${pkg.slideRange.to}` : ''}</span></div>
                 </div>
               </div>
@@ -228,6 +238,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Operational Plan Roadmap & Milestones */}
+      <TimelineSection isAr={isAr} />
+
+      {/* Cadre & Graduate Testimonials */}
+      <TestimonialsSection isAr={isAr} />
     </div>
   );
 }
