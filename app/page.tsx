@@ -4,6 +4,7 @@ import Link from "next/link";
 import { academyInfo, operationalTargets, trainingPackages } from "@/data/mock";
 import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
+import { HeroImageRotator } from "@/components/HeroImageRotator";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -79,56 +80,46 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Photo Strip / Collage Column */}
+            {/* Dynamic 3D Rotating Showcase */}
             <div className="lg:col-span-5">
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 p-2 sm:p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/15 shadow-2xl">
-                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="/gallery/extra-1.jpeg" 
-                    alt={isAr ? "أنشطة ولقاءات حزب المحافظين" : "JCP Activities"}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="/gallery/extra-2.jpeg" 
-                    alt={isAr ? "ندوات وورش عمل الحزب" : "JCP Workshops"}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="/gallery/extra-3.jpeg" 
-                    alt={isAr ? "التدريب الميداني والكوادر" : "Cadre Training"}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="/gallery/extra-4.jpeg" 
-                    alt={isAr ? "اجتماعات الأكاديمية الحزبية" : "Academy Meetings"}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-              </div>
-              <div className="mt-3 text-center">
-                <Link 
-                  href="/news-gallery?tab=gallery"
-                  className="inline-flex items-center gap-1.5 text-xs font-almarai font-bold text-jcp-gold hover:text-white transition-colors"
-                >
-                  <span>{isAr ? "استعرض المزيد في معرض الصور والفعاليات ←" : "Explore more in the photo gallery →"}</span>
-                </Link>
-              </div>
+              <HeroImageRotator isAr={isAr} />
             </div>
 
+          </div>
+        </div>
+
+        {/* Prestigious Impact Stats Bar */}
+        <div className="relative border-t border-white/10 bg-black/25 backdrop-blur-md">
+          <div className="container mx-auto px-4 py-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex">1,200+</div>
+                <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
+                  {isAr ? "مستهدف التدريب والتأهيل" : "Target Trainees"}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex">12</div>
+                <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
+                  {isAr ? "حقيبة تثقيفية معتمدة" : "Accredited Packages"}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex">3</div>
+                <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
+                  {isAr ? "مستويات تأهيل قيادي" : "Leadership Levels"}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex">100%</div>
+                <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
+                  {isAr ? "شهادات رقمية موثقة QR" : "Verified QR Certificates"}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
