@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { updateProfile } from './actions';
-import { User, Mail, Shield, Briefcase, Calendar, CheckCircle, AlertCircle, Save } from 'lucide-react';
+import { User, Mail, Shield, Briefcase, Calendar, CheckCircle, AlertCircle, Save, ShieldCheck, ExternalLink } from 'lucide-react';
 
 interface ProfileFormProps {
   initialData: {
@@ -11,6 +12,7 @@ interface ProfileFormProps {
     experience: string | null;
     party_affiliation: string | null;
     email: string;
+    roles?: string[];
   };
 }
 
@@ -153,6 +155,56 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1 font-cairo">هذا الحقل يخضع للتحقق من قبل إدارة الأكاديمية.</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-cairo mb-2">
+                الرتبة والصلاحيات المعتمدة
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(initialData.roles || ['trainee']).map((role) => {
+                  const roleLabels: Record<string, { label: string; bg: string; text: string }> = {
+                    admin: { label: 'مسؤول النظام (Admin)', bg: 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800', text: 'text-red-700 dark:text-red-300' },
+                    trainer: { label: 'مدرب معتمد (Trainer)', bg: 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800', text: 'text-emerald-700 dark:text-emerald-300' },
+                    supervisor: { label: 'مشرف أكاديمي (Supervisor)', bg: 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800', text: 'text-blue-700 dark:text-blue-300' },
+                    member: { label: 'عضو حزبي (Member)', bg: 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800', text: 'text-amber-700 dark:text-amber-300' },
+                    trainee: { label: 'متدرب (Trainee)', bg: 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700', text: 'text-slate-700 dark:text-slate-300' },
+                  };
+                  const roleInfo = roleLabels[role] || { label: role, bg: 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700', text: 'text-gray-700 dark:text-gray-300' };
+
+                  return (
+                    <span 
+                      key={role} 
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold font-cairo ${roleInfo.bg} ${roleInfo.text}`}
+                    >
+                      <ShieldCheck className="w-4 h-4" />
+                      {roleInfo.label}
+                    </span>
+                  );
+                })}
+              </div>
+
+              {/* Role quick navigation links */}
+              <div className="mt-4 space-y-2">
+                {(initialData.roles || []).includes('admin') && (
+                  <Link
+                    href="/admin"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-jcp-navy text-white text-xs font-bold rounded-lg hover:bg-opacity-90 transition-all font-cairo"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    الانتقال إلى لوحة تحكم الإدارة (Admin Dashboard)
+                  </Link>
+                )}
+                {(initialData.roles || []).includes('trainer') && !(initialData.roles || []).includes('admin') && (
+                  <Link
+                    href="/trainer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 text-white text-xs font-bold rounded-lg hover:bg-opacity-90 transition-all font-cairo"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    الانتقال إلى لوحة تحكم المدرب (Trainer Dashboard)
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

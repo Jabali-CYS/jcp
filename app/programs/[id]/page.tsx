@@ -19,6 +19,21 @@ export default async function ProgramDetailsPage({ params }: { params: Promise<{
     notFound()
   }
 
+  // 1b. Fetch program sessions and training packages
+  const { data: sessions } = await supabase
+    .from('sessions')
+    .select(`
+      id,
+      session_date,
+      training_packages (
+        id,
+        title,
+        description
+      )
+    `)
+    .eq('program_id', id)
+    .order('session_date', { ascending: true })
+
   // 2. Fetch authenticated user (if any)
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -65,8 +80,35 @@ export default async function ProgramDetailsPage({ params }: { params: Promise<{
               </div>
 
               <div className="prose dark:prose-invert font-cairo max-w-none">
-                <p>هذا البرنامج التدريبي يهدف إلى تطوير المهارات الأساسية. سيتم إضافة المزيد من التفاصيل لاحقاً بناءً على الحزم التدريبية والجلسات المخصصة.</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  برنامج تدريبي معتمد من الأكاديمية الحزبية لحزب المحافظين الأردني لتأهيل الكوادر وتطوير المهارات الحزبية والسياسية وفق أفضل المعايير.
+                </p>
               </div>
+
+              {sessions && sessions.length > 0 && (
+                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white font-kufi mb-4">
+                    المستويات والحقائب التدريبية المعتمدة
+                  </h2>
+                  <div className="space-y-4">
+                    {sessions.map((sess: any, idx: number) => {
+                      const pkg = sess.training_packages
+                      return (
+                        <div key={sess.id || idx} className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600">
+                          <h4 className="font-bold text-gray-900 dark:text-white font-kufi mb-1">
+                            {pkg?.title || `المستوى ${idx + 1}`}
+                          </h4>
+                          {pkg?.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-300 font-cairo leading-relaxed">
+                              {pkg.description}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

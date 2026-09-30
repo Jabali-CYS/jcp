@@ -78,6 +78,10 @@ export default function Footer() {
 
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400 font-almarai">
           <p>{t.academy} - {t.party} © {new Date().getFullYear()}</p>
+          <p className="text-slate-400 text-center">
+            {isAr ? "جميع الحقوق محفوظة لـ " : "All rights reserved to "}
+            <span className="font-bold text-white tracking-wider bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">QFIX</span>
+          </p>
           <p className="text-jcp-gold font-bold tracking-widest">{isAr ? "هويَّة – انتماء – مواطنة" : "Identity – Belonging – Citizenship"}</p>
         </div>
       </div>

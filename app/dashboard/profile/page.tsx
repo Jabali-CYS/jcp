@@ -19,18 +19,24 @@ export default async function ProfilePage() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
-  if (!profile) {
-    redirect('/dashboard');
-  }
+  const { data: rolesData } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user.id);
+
+  const roles = (rolesData && rolesData.length > 0) 
+    ? rolesData.map((r: { role: string }) => r.role) 
+    : ['trainee'];
 
   const initialData = {
-    full_name: profile.full_name,
-    age: profile.age,
-    experience: profile.experience,
-    party_affiliation: profile.party_affiliation,
+    full_name: profile?.full_name || user.user_metadata?.full_name || 'مستخدم جديد',
+    age: profile?.age ?? null,
+    experience: profile?.experience ?? null,
+    party_affiliation: profile?.party_affiliation ?? null,
     email: user.email || '',
+    roles: roles,
   };
 
   return (
@@ -38,10 +44,10 @@ export default async function ProfilePage() {
       <div className="max-w-4xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white font-kufi">
-            الملف الشخصي
+            الملف الشخصي والحساب
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400 font-cairo">
-            إدارة بياناتك الشخصية في الأكاديمية الحزبية.
+            إدارة بياناتك الشخصية والاطلاع على رتبتك وصلاحياتك المعتمدة في الأكاديمية الحزبية.
           </p>
         </div>
 

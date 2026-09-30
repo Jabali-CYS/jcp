@@ -16,7 +16,7 @@ export default function AboutPage() {
     visionText: isAr ? academyInfo.vision : (academyInfo.visionEn || academyInfo.vision),
     missionTitle: isAr ? "الرسالة" : "Mission",
     missionText: isAr ? academyInfo.mission : (academyInfo.missionEn || academyInfo.mission),
-    principlesTitle: isAr ? "المبادئ הـ 13" : "13 Principles",
+    principlesTitle: isAr ? "المبادئ الـ 13" : "13 Principles",
     goalsTitle: isAr ? "الأهداف الـ 14" : "14 Goals",
     logoTitle: isAr ? "دلالة الشعار" : "Logo Significance",
     logoText: isAr ? academyInfo.logoSignificance : (academyInfo.logoSignificanceEn || academyInfo.logoSignificance),

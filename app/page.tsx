@@ -47,33 +47,88 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative bg-jcp-navy text-white overflow-hidden border-b-4 border-jcp-red">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-jcp-gold text-sm font-bold font-almarai mb-6 backdrop-blur-sm border border-white/10">
-              <span className="w-2 h-2 rounded-full bg-jcp-gold animate-pulse"></span>
-              {t.platform}
+        <div className="container mx-auto px-4 py-16 lg:py-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Text Column */}
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-jcp-gold text-sm font-bold font-almarai mb-6 backdrop-blur-sm border border-white/10">
+                <span className="w-2 h-2 rounded-full bg-jcp-gold animate-pulse"></span>
+                {t.platform}
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-readex leading-tight mb-6">
+                {t.heroTitle}
+              </h1>
+              <p className="text-lg md:text-xl text-slate-200 font-almarai mb-10 max-w-2xl leading-relaxed">
+                {isAr ? academyInfo.mission : academyInfo.missionEn}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link 
+                  href="/packages" 
+                  className="inline-flex items-center gap-2 bg-jcp-gold text-jcp-navy px-8 py-4 rounded-md font-bold font-almarai hover:bg-white transition-colors focus:outline-none focus:ring-4 focus:ring-jcp-gold/50 shadow-lg"
+                >
+                  {t.explore}
+                  <ArrowLeft size={20} className="rtl:rotate-180" />
+                </Link>
+                <Link 
+                  href="/about" 
+                  className="inline-flex items-center gap-2 bg-white/10 text-white px-8 py-4 rounded-md font-bold font-almarai hover:bg-white/20 backdrop-blur-sm transition-colors border border-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
+                >
+                  {t.about}
+                </Link>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold font-readex leading-tight mb-6">
-              {t.heroTitle}
-            </h1>
-            <p className="text-lg md:text-xl text-slate-200 font-almarai mb-10 max-w-2xl leading-relaxed">
-              {isAr ? academyInfo.mission : academyInfo.missionEn}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link 
-                href="/packages" 
-                className="inline-flex items-center gap-2 bg-jcp-gold text-jcp-navy px-8 py-4 rounded-md font-bold font-almarai hover:bg-white transition-colors focus:outline-none focus:ring-4 focus:ring-jcp-gold/50"
-              >
-                {t.explore}
-                <ArrowLeft size={20} className="rtl:rotate-180" />
-              </Link>
-              <Link 
-                href="/about" 
-                className="inline-flex items-center gap-2 bg-white/10 text-white px-8 py-4 rounded-md font-bold font-almarai hover:bg-white/20 backdrop-blur-sm transition-colors border border-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
-              >
-                {t.about}
-              </Link>
+
+            {/* Photo Strip / Collage Column */}
+            <div className="lg:col-span-5">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 p-2 sm:p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/15 shadow-2xl">
+                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/gallery/extra-1.jpeg" 
+                    alt={isAr ? "أنشطة ولقاءات حزب المحافظين" : "JCP Activities"}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/gallery/extra-2.jpeg" 
+                    alt={isAr ? "ندوات وورش عمل الحزب" : "JCP Workshops"}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/gallery/extra-3.jpeg" 
+                    alt={isAr ? "التدريب الميداني والكوادر" : "Cadre Training"}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div className="relative group overflow-hidden rounded-xl h-36 sm:h-44 border border-white/10 shadow-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/gallery/extra-4.jpeg" 
+                    alt={isAr ? "اجتماعات الأكاديمية الحزبية" : "Academy Meetings"}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <Link 
+                  href="/news-gallery?tab=gallery"
+                  className="inline-flex items-center gap-1.5 text-xs font-almarai font-bold text-jcp-gold hover:text-white transition-colors"
+                >
+                  <span>{isAr ? "استعرض المزيد في معرض الصور والفعاليات ←" : "Explore more in the photo gallery →"}</span>
+                </Link>
+              </div>
             </div>
+
           </div>
         </div>
       </section>

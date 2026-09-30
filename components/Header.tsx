@@ -41,7 +41,7 @@ export default function Header() {
     about: isAr ? "من نحن" : "About Us",
     packages: isAr ? "الحقائب التثقيفية" : "Training Packages",
     programs: isAr ? "البرامج التدريبية" : "Training Programs",
-    gallery: isAr ? "معرض الصور" : "Gallery",
+    gallery: isAr ? "الأخبار والمعرض" : "News & Gallery",
     ecosystem: isAr ? "منظومة الأكاديمية" : "Academy Ecosystem",
     explore: isAr ? "استكشف" : "Explore",
     units: isAr ? "الوحدات الإدارية" : "Administrative Units",
@@ -58,26 +58,26 @@ export default function Header() {
 
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 transition-colors duration-300">
-      <div className="container mx-auto px-4 lg:px-8 py-3 flex justify-between items-center min-h-[5rem] gap-2 lg:gap-4">
+      <div className="container mx-auto px-4 lg:px-8 py-3 flex justify-between items-center min-h-[5.5rem] lg:min-h-[6.5rem] gap-2 lg:gap-4">
         
         {/* Right Side: Academy Logo (RTL context) */}
         <div className="flex items-center shrink-0">
-          <Link href="/" className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-jcp-navy rounded-md p-1 transition-colors">
+          <Link href="/" className="flex items-center gap-3.5 group focus:outline-none focus:ring-2 focus:ring-jcp-navy rounded-md p-1 transition-colors">
             <div className="dark:bg-white dark:p-1.5 dark:rounded-lg transition-colors">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="/academy-logo.png" 
                 alt={isAr ? "شعار الأكاديمية الحزبية" : "JCP Academy Logo"}
-                width={96} 
-                height={96} 
-                className="object-contain h-16 md:h-20 lg:h-24 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
+                width={120} 
+                height={120} 
+                className="object-contain h-20 sm:h-24 md:h-28 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
               />
             </div>
             <div className="hidden sm:block">
-              <div className="font-almarai font-black text-2xl text-jcp-navy dark:text-white leading-tight group-hover:text-jcp-green transition-colors">
+              <div className="font-almarai font-black text-2xl lg:text-3xl text-jcp-navy dark:text-white leading-tight group-hover:text-jcp-green transition-colors">
                 {t.academy}
               </div>
-              <div className="text-sm text-slate-600 dark:text-slate-400 tracking-wide font-almarai font-bold mt-1">
+              <div className="text-sm lg:text-base text-slate-600 dark:text-slate-400 tracking-wide font-almarai font-bold mt-1">
                 {t.party}
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function Header() {
             <Link href="/about" className={navLinkClass("/about")}>{t.about}</Link>
             <Link href="/packages" className={navLinkClass("/packages")}>{t.packages}</Link>
             <Link href="/programs" className={navLinkClass("/programs")}>{t.programs}</Link>
-            <Link href="/gallery" className={navLinkClass("/gallery")}>{t.gallery}</Link>
+            <Link href="/news-gallery" className={navLinkClass("/news-gallery")}>{t.gallery}</Link>
             
             {/* Explore Dropdown */}
             <div 
@@ -173,9 +173,9 @@ export default function Header() {
                <img 
                  src="/party-logo.png" 
                  alt={isAr ? "شعار حزب المحافظين الأردني" : "Jordanian Conservative Party Logo"}
-                 width={80} 
-                 height={80} 
-                 className="object-contain h-14 md:h-16 lg:h-20 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
+                 width={100} 
+                 height={100} 
+                 className="object-contain h-16 sm:h-20 md:h-24 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
                />
              </div>
           </Link>
@@ -208,7 +208,7 @@ export default function Header() {
               <Link href="/programs" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.programs}</Link>
               <Link href="/units" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.units}</Link>
               <Link href="/skills" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.skills}</Link>
-              <Link href="/gallery" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.gallery}</Link>
+              <Link href="/news-gallery" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.gallery}</Link>
               <Link href="/services" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.services}</Link>
               <Link href="/online-courses" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.onlineCourses}</Link>
               <Link href="/contact" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.contact}</Link>
