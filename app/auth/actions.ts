@@ -121,26 +121,32 @@ export async function signup(formData: FormData) {
       try {
         if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
           adminClient = createAdminClient()
-          const { error: pErr } = await adminClient.from('profiles').insert({
+          const { error: pErr } = await adminClient.from('profiles').upsert({
             id: data.user.id,
             full_name: fullName,
-          })
-          if (pErr) throw pErr
+          }, { onConflict: 'id' })
+          if (pErr) {
+            console.error('Profile upsert error:', pErr.message, pErr.details)
+            throw new Error(`Profile setup failed: ${pErr.message}`)
+          }
 
-          const { error: rErr } = await adminClient.from('user_roles').insert({
+          const { error: rErr } = await adminClient.from('user_roles').upsert({
             user_id: data.user.id,
             role: 'trainee',
-          })
-          if (rErr) throw rErr
+          }, { onConflict: 'user_id' })
+          if (rErr) {
+            console.error('Role upsert error:', rErr.message, rErr.details)
+            throw new Error(`Role setup failed: ${rErr.message}`)
+          }
         } else {
-          await supabase.from('profiles').insert({
+          await supabase.from('profiles').upsert({
             id: data.user.id,
             full_name: fullName,
-          })
-          await supabase.from('user_roles').insert({
+          }, { onConflict: 'id' })
+          await supabase.from('user_roles').upsert({
             user_id: data.user.id,
             role: 'trainee',
-          })
+          }, { onConflict: 'user_id' })
         }
       } catch (profileErr: any) {
         console.error('Transactional rollback during signup:', profileErr)
@@ -152,7 +158,7 @@ export async function signup(formData: FormData) {
             console.error('Rollback failure:', rollbackErr)
           }
         }
-        return { error: 'حدث خطأ أثناء إعداد الحساب، يرجى المحاولة مجدداً لاحقاً.' }
+        return { error: `حدث خطأ أثناء إعداد الحساب (${profileErr?.message || 'يرجى المحاولة لاحقاً'})` }
       }
 
       // Check if email confirmation is required (session is null)
