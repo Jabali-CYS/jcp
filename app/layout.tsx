@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   description: "المنصة التدريبية للأكاديمية الحزبية – حزب المحافظين الأردني",
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/academy-logo.png", type: "image/png" },
+      { url: "/academy-logo.png?v=2", type: "image/png" },
+      { url: "/favicon.ico?v=2" },
     ],
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/academy-logo.png?v=2",
+    apple: "/apple-touch-icon.png?v=2",
   },
   openGraph: {
     title: "JCP Academy | الأكاديمية الحزبية",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "JCP Academy | الأكاديمية الحزبية",
     images: [
       {
-        url: "/academy-logo.png",
+        url: "/academy-logo.png?v=2",
         width: 800,
         height: 800,
         alt: "شعار الأكاديمية الحزبية",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "JCP Academy | الأكاديمية الحزبية",
     description: "المنصة التدريبية للأكاديمية الحزبية – حزب المحافظين الأردني",
-    images: ["/academy-logo.png"],
+    images: ["/academy-logo.png?v=2"],
   },
 };
 
@@ -62,6 +62,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${readexPro.variable} ${almarai.variable} h-full antialiased`}
     >
       <head>
+        <link rel="icon" href="/academy-logo.png?v=2" type="image/png" />
+        <link rel="shortcut icon" href="/academy-logo.png?v=2" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
         <script
           dangerouslySetInnerHTML={{
             __html: "if(typeof window!=='undefined'&&!window.__name){window.__name=function(t){return t};}if(typeof globalThis!=='undefined'&&!globalThis.__name){globalThis.__name=function(t){return t};}",
