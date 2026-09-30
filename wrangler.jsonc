@@ -8,8 +8,19 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
+	"routes": [
+		{
+			"pattern": "jcpacademy.com",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.jcpacademy.com",
+			"custom_domain": true
+		}
+	],
 	"vars": {
-		"NEXT_PUBLIC_SUPABASE_URL": "https://kmgxyhccbxgsqyxuqffe.supabase.co"
+		"NEXT_PUBLIC_SUPABASE_URL": "https://kmgxyhccbxgsqyxuqffe.supabase.co",
+		"NEXT_PUBLIC_SITE_URL": "https://jcpacademy.com"
 	},
 	"assets": {
 		"directory": ".open-next/assets",
