@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { Award, CheckCircle2, XCircle, Calendar, User, BookOpen, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 
@@ -39,9 +39,9 @@ async function VerifyContent({ serial }: { serial?: string }) {
     )
   }
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
-  // Query certificate by serial number
+  // Query certificate by serial number safely on server
   const { data: cert, error } = await supabase
     .from('certificates')
     .select(`
