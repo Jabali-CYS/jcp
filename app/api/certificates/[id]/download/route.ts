@@ -24,7 +24,7 @@ export async function GET(
       )
     }
 
-    // 2. Fetch certificate data with enrollment & profile relations
+    // 2. Fetch certificate data with enrollment, profile, and session program relations
     const { data: cert, error } = await supabase
       .from('certificates')
       .select(`
@@ -36,7 +36,9 @@ export async function GET(
         enrollments (
           profile_id,
           profiles ( full_name ),
-          programs ( title )
+          sessions (
+            programs ( title )
+          )
         )
       `)
       .eq('id', id)
@@ -77,10 +79,11 @@ export async function GET(
     }
 
     const profile = Array.isArray(enrollment.profiles) ? enrollment.profiles[0] : enrollment.profiles
-    const program = Array.isArray(enrollment.programs) ? enrollment.programs[0] : enrollment.programs
+    const sessionObj = Array.isArray(enrollment.sessions) ? enrollment.sessions[0] : enrollment.sessions
+    const programObj = Array.isArray(sessionObj?.programs) ? sessionObj?.programs[0] : sessionObj?.programs
 
     const participantName = profile?.full_name || 'عضو الأكاديمية'
-    const programTitle = program?.title || 'برنامج تأهيلي معتمد'
+    const programTitle = programObj?.title || 'برنامج تأهيلي معتمد'
 
     // Format Arabic date
     const issueDate = new Date(cert.issue_date || new Date()).toLocaleDateString('ar-JO', {

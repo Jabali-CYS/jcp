@@ -25,7 +25,9 @@ export default async function TraineeCertificatesPage() {
       issue_date,
       serial_number,
       enrollments (
-        programs ( title )
+        sessions (
+          programs ( title )
+        )
       )
     `)
     .order('issue_date', { ascending: false })
@@ -65,9 +67,10 @@ export default async function TraineeCertificatesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {certificates.map((cert: any) => {
-              const programTitle = Array.isArray(cert.enrollments) 
-                ? cert.enrollments[0]?.programs?.title 
-                : cert.enrollments?.programs?.title
+              const enr = Array.isArray(cert.enrollments) ? cert.enrollments[0] : cert.enrollments
+              const sessionObj = Array.isArray(enr?.sessions) ? enr?.sessions[0] : enr?.sessions
+              const programObj = Array.isArray(sessionObj?.programs) ? sessionObj?.programs[0] : sessionObj?.programs
+              const programTitle = programObj?.title || 'برنامج تدريبي'
 
               return (
                 <div key={cert.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col hover:border-gold-300 transition-all">

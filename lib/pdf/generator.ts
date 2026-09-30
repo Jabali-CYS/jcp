@@ -27,7 +27,7 @@ export async function buildCertificateHtml(data: CertificateData): Promise<strin
   const safeSerial = escapeHtml(data.serialNumber)
 
   // Generate trusted Verification QR Code
-  const verificationUrl = `https://jcp.ahmadjabali-2014.workers.dev/verify?serial=${encodeURIComponent(data.serialNumber)}`
+  const verificationUrl = `https://jcpacademy.com/verify?serial=${encodeURIComponent(data.serialNumber)}`
   let qrDataUrl = ''
   try {
     qrDataUrl = await QRCode.toDataURL(verificationUrl, {
@@ -124,7 +124,7 @@ export async function buildCertificateHtml(data: CertificateData): Promise<strin
             <div class="flex items-center gap-3">
                 <div class="w-20 h-20 flex items-center justify-center relative">
                     <img 
-                      src="https://jcp.ahmadjabali-2014.workers.dev/party-logo.png" 
+                      src="https://jcpacademy.com/party-logo.png" 
                       alt="شعار حزب المحافظين الأردني" 
                       class="max-w-full max-h-full object-contain" 
                     />
@@ -150,7 +150,7 @@ export async function buildCertificateHtml(data: CertificateData): Promise<strin
             <div class="flex items-center gap-3 flex-row-reverse text-left">
                 <div class="w-20 h-20 flex items-center justify-center relative">
                     <img 
-                      src="https://jcp.ahmadjabali-2014.workers.dev/academy-logo.png" 
+                      src="https://jcpacademy.com/academy-logo.png" 
                       alt="شعار الأكاديمية الحزبية" 
                       class="max-w-full max-h-full object-contain" 
                     />

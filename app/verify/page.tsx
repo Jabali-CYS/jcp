@@ -51,7 +51,9 @@ async function VerifyContent({ serial }: { serial?: string }) {
       serial_number,
       enrollments (
         profiles ( full_name ),
-        programs ( title )
+        sessions (
+          programs ( title )
+        )
       )
     `)
     .eq('serial_number', serial.trim())
@@ -78,10 +80,11 @@ async function VerifyContent({ serial }: { serial?: string }) {
 
   const enrollment = Array.isArray(cert.enrollments) ? cert.enrollments[0] : cert.enrollments
   const profile = Array.isArray(enrollment?.profiles) ? enrollment?.profiles[0] : enrollment?.profiles
-  const program = Array.isArray(enrollment?.programs) ? enrollment?.programs[0] : enrollment?.programs
+  const sessionObj = Array.isArray(enrollment?.sessions) ? enrollment?.sessions[0] : enrollment?.sessions
+  const programObj = Array.isArray(sessionObj?.programs) ? sessionObj?.programs[0] : sessionObj?.programs
 
   const participantName = profile?.full_name || 'عضو الأكاديمية'
-  const programTitle = program?.title || 'برنامج تأهيلي معتمد'
+  const programTitle = programObj?.title || 'برنامج تأهيلي معتمد'
   const formattedDate = new Date(cert.issue_date).toLocaleDateString('ar-JO', {
     year: 'numeric',
     month: 'long',

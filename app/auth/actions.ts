@@ -41,7 +41,7 @@ export async function login(formData: FormData) {
       return { error: 'حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة لاحقاً.' }
     }
 
-    // Self-healing check: Ensure authenticated user has a profile and trainee role
+    // Self-healing check: Ensure authenticated user has a profile and trainee role if missing
     if (authData?.user) {
       try {
         const userId = authData.user.id
@@ -54,14 +54,26 @@ export async function login(formData: FormData) {
         if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
           const adminClient = createAdminClient()
           const fullName = authData.user.user_metadata?.full_name || 'المتدرب'
-          await adminClient.from('profiles').upsert({
-            id: userId,
-            full_name: fullName,
-          }, { onConflict: 'id' })
-          await adminClient.from('user_roles').upsert({
-            user_id: userId,
-            role: 'trainee',
-          }, { onConflict: 'user_id' })
+          if (!existingProfile) {
+            await adminClient.from('profiles').upsert({
+              id: userId,
+              full_name: fullName,
+            }, { onConflict: 'id' })
+          }
+
+          // Guard against demoting admins/trainers: only insert trainee if user has NO role at all
+          const { data: existingRole } = await adminClient
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', userId)
+            .maybeSingle()
+
+          if (!existingRole) {
+            await adminClient.from('user_roles').insert({
+              user_id: userId,
+              role: 'trainee',
+            })
+          }
         }
       } catch (healingErr) {
         console.warn('Profile/role self-healing notice:', healingErr)
@@ -191,7 +203,7 @@ export async function forgotPassword(formData: FormData) {
       return { error: 'يرجى إدخال البريد الإلكتروني' }
     }
 
-    const origin = getServerEnv('NEXT_PUBLIC_SITE_URL') || 'https://jcp.ahmadjabali-2014.workers.dev'
+    const origin = getServerEnv('NEXT_PUBLIC_SITE_URL') || 'https://jcpacademy.com'
     const redirectTo = `${origin}/auth/callback?next=/update-password`
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
