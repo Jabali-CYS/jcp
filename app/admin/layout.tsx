@@ -19,7 +19,7 @@ export default async function AdminLayout({
   }
 
   // Authorize via RLS check
-  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single()
+  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle()
   if (roleData?.role !== 'admin') {
     redirect('/dashboard') // unauthorized users go to normal dashboard
   }

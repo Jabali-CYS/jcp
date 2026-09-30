@@ -24,8 +24,8 @@ export default async function TrainerLayout({
     .eq('user_id', user.id)
     .maybeSingle()
 
-  if (roleData?.role !== 'trainer') {
-    redirect('/dashboard') // unauthorized users (e.g. trainee) go to normal dashboard
+  if (roleData?.role !== 'trainer' && roleData?.role !== 'admin') {
+    redirect('/dashboard') // unauthorized users (e.g. trainee/member) go to normal dashboard
   }
 
   return (

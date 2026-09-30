@@ -45,7 +45,7 @@ export default async function ProgramDetailsPage({ params }: { params: Promise<{
       .select('*')
       .eq('program_id', id)
       .eq('profile_id', user.id)
-      .single()
+      .maybeSingle()
     existingApplication = app
   }
 

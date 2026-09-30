@@ -11,7 +11,7 @@ export async function processApplication(formData: FormData): Promise<void> {
   if (!user) throw new Error('Unauthorized')
 
   // Check admin role via standard RLS-bound server client
-  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single()
+  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle()
   if (roleData?.role !== 'admin') throw new Error('Forbidden')
 
   // 2. Input Validation
@@ -113,7 +113,7 @@ export async function makeAdmin(formData: FormData): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single()
+  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle()
   if (roleData?.role !== 'admin') throw new Error('Forbidden')
 
   const adminClient = createAdminClient()
@@ -132,7 +132,7 @@ export async function makeAdmin(formData: FormData): Promise<void> {
     .from('user_roles')
     .select('role')
     .eq('user_id', targetUser.id)
-    .single()
+    .maybeSingle()
 
   if (existingRole?.role === 'admin') {
     return
@@ -161,7 +161,7 @@ export async function demoteAdmin(formData: FormData): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
 
-  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single()
+  const { data: roleData } = await supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle()
   if (roleData?.role !== 'admin') throw new Error('Forbidden')
 
   const adminClient = createAdminClient()
