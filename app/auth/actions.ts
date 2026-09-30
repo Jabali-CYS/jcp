@@ -51,17 +51,17 @@ export async function login(formData: FormData) {
           .eq('id', userId)
           .maybeSingle()
 
-        if (!existingProfile && getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
+        if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
           const adminClient = createAdminClient()
           const fullName = authData.user.user_metadata?.full_name || 'المتدرب'
-          await adminClient.from('profiles').insert({
+          await adminClient.from('profiles').upsert({
             id: userId,
             full_name: fullName,
-          })
-          await adminClient.from('user_roles').insert({
+          }, { onConflict: 'id' })
+          await adminClient.from('user_roles').upsert({
             user_id: userId,
             role: 'trainee',
-          })
+          }, { onConflict: 'user_id' })
         }
       } catch (healingErr) {
         console.warn('Profile/role self-healing notice:', healingErr)
