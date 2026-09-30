@@ -58,7 +58,7 @@ export default function UpdatePasswordPage() {
       setIsSuccess(true);
       setIsLoading(false);
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push('/login?message=password_updated');
       }, 2000);
     }
   };
@@ -101,10 +101,10 @@ export default function UpdatePasswordPage() {
 
             <div className="text-center font-cairo">
               <Link
-                href="/dashboard"
+                href="/login?message=password_updated"
                 className="inline-flex items-center gap-2 text-sm font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400"
               >
-                الانتقال إلى لوحة المعلومات فوراً
+                تسجيل الدخول فوراً
                 <ArrowLeft className="w-4 h-4" />
               </Link>
             </div>
