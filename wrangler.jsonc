@@ -8,6 +8,9 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
+	"vars": {
+		"NEXT_PUBLIC_SUPABASE_URL": "https://kmgxyhccbxgsqyxuqffe.supabase.co"
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
