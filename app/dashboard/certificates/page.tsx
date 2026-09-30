@@ -97,14 +97,14 @@ export default async function TraineeCertificatesPage() {
                         </div>
                       </div>
                       
-                      <button 
-                        disabled
-                        className="inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-4 py-2 rounded-lg text-sm font-bold font-cairo cursor-not-allowed shadow-sm"
-                        title="تحميل PDF غير متاح مؤقتًا في نسخة المؤتمر"
+                      <a 
+                        href={`/api/certificates/${cert.id}/download`}
+                        download
+                        className="inline-flex items-center gap-2 bg-jcp-navy hover:bg-opacity-90 text-white px-4 py-2 rounded-lg text-sm font-bold font-cairo transition-all shadow-sm"
                       >
-                        <Download className="w-4 h-4" />
-                        تحميل PDF (مؤجل)
-                      </button>
+                        <Download className="w-4 h-4 text-jcp-gold" />
+                        تحميل PDF
+                      </a>
                     </div>
                   </div>
                 </div>
