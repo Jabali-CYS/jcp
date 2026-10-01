@@ -43,10 +43,30 @@ export const contactData: ContactInfo[] = [
     id: "facebook",
     labelAr: "فيسبوك",
     labelEn: "Facebook",
-    valueAr: "الصفحة الرسمية",
-    valueEn: "Official Page",
+    valueAr: "الصفحة الرسمية لحزب المحافظين الأردني",
+    valueEn: "Official Facebook Page",
     href: "https://www.facebook.com/share/p/1C9UhbHiye/",
     type: "social",
+    provenance: "SOURCE_VERIFIED"
+  },
+  {
+    id: "iec",
+    labelAr: "الهيئة المستقلة للانتخاب",
+    labelEn: "Independent Election Commission",
+    valueAr: "سجل حزب المحافظين الأردني لدى الهيئة",
+    valueEn: "Party registration on IEC portal",
+    href: "https://parties.iec.jo/%D8%A7%D9%84%D8%A7%D8%AD%D8%B2%D8%A7%D8%A8/almohfden",
+    type: "website",
+    provenance: "SOURCE_VERIFIED"
+  },
+  {
+    id: "ministry",
+    labelAr: "وزارة الشؤون السياسية والبرلمانية",
+    labelEn: "Ministry of Political Affairs",
+    valueAr: "البوابة الرسمية للوزارة",
+    valueEn: "Official Ministry Portal",
+    href: "https://moppa.gov.jo",
+    type: "website",
     provenance: "SOURCE_VERIFIED"
   }
 ];

@@ -3,8 +3,8 @@ import { AcademyInfo, OperationalTarget, TrainingPackage, AcademyUnit, TimelineP
 export const academyInfo: AcademyInfo = {
   id: 'academy-1',
   sourceStatus: 'SOURCE_VERIFIED',
-  aboutAcademy: 'تُعتبر هذه الأكاديمية ذراعًا معرفيًّا وتنظيميًّا داخليًّا للحزب، ويُطبَّق عليها مبدأ الاستقلال الإداري والتشغيلي في حدود ما يُقرّه الحزب والمكتب السياسي.',
-  aboutAcademyEn: 'This academy is considered an internal cognitive and organizational arm of the party. It operates on the principle of administrative and operational independence within the limits approved by the party and the political bureau.',
+  aboutAcademy: 'تُعتبر هذه الأكاديمية ذراعًا معرفيًّا وتنظيميًّا داخليًّا لحزب المحافظين الأردني، ويُطبَّق عليها مبدأ الاستقلال الإداري والتشغيلي في حدود ما يُقرّه الحزب والمكتب السياسي.',
+  aboutAcademyEn: 'This academy is considered an internal cognitive and organizational arm of the Jordanian Conservative Party. It operates on the principle of administrative and operational independence within the limits approved by the party and the political bureau.',
   vision: 'تطوير العمل الحزبي الوطني برؤية وطنية صادقة تحقق الإنجاز، وبوسائل سلمية تحفظ وحدة الشعب والسلم الأهلي، وتــرســيخ الــعمل الحــزبــي؛ لــيكون نــواة انطلاق نــحو المشاركة الــسياســية الــفاعــلة بهــدف الـوصـول إلـى أغـلبية بـرلمانية بـرامـجية؛ لـتشكيل حـكومـة حزبية قـادرة عـلى تـنفيذ بـرامـج الحـــزب وتـــطلعاتـــه بـــموجـــب آلـــيات عـــمل واضـــحة، وجـــداول زمـــنية محـــددة وفـــقاً لأحكام الـدسـتور، وتـرسـيخ المشاركة الـفاعـلة فـي كـافـة أوجـه الـحياة الـسياسـيّة، والاجتماعية، والاقتصادية، والثقافية.',
   visionEn: 'Developing national partisan work with a sincere national vision that achieves accomplishment, through peaceful means that preserve the unity of the people and civil peace...',
   mission: 'حزب المحافظين هو حزب أردني النشأة لكل أبناء الوطن المؤمنين بثوابته وسيادته وكيانه، ويملك تصوراً واضحَ المعالم والملامح لكل التحديات والقضايا الوطنية العالقة والمُلحّة.',

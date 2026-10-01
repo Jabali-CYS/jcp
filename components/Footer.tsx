@@ -22,6 +22,7 @@ export default function Footer() {
     website: isAr ? "الموقع الإلكتروني" : "Website",
     facebook: isAr ? "فيسبوك" : "Facebook",
     iec: isAr ? "الهيئة المستقلة للانتخاب" : "Independent Election Commission",
+    politicalMinistry: isAr ? "وزارة الشؤون السياسية والبرلمانية" : "Ministry of Political & Parliamentary Affairs",
   };
 
   return (
@@ -46,6 +47,7 @@ export default function Footer() {
             <ul className="space-y-3 font-almarai text-slate-300">
               <li><a href="https://conservativesparty.jo/about/" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {isAr ? "الموقع الرسمي للحزب" : "Official Party Website"}</a></li>
               <li><a href="https://parties.iec.jo/%D8%A7%D9%84%D8%A7%D8%AD%D8%B2%D8%A7%D8%A8/almohfden" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {t.iec}</a></li>
+              <li><a href="https://moppa.gov.jo" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {t.politicalMinistry}</a></li>
               <li><Link href="/programs" className="hover:text-jcp-gold transition-colors flex items-center gap-2">{isAr ? "البرامج التدريبية للأكاديمية" : "Academy Training Programs"}</Link></li>
             </ul>
           </div>
