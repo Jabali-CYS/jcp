@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { academyInfo, operationalTargets, trainingPackages } from "@/data/mock";
-import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare } from "lucide-react";
+import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare, Play } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { HeroImageRotator } from "@/components/HeroImageRotator";
 import { UpcomingTicker } from "@/components/UpcomingTicker";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { TimelineSection } from "@/components/TimelineSection";
+import { PartyVideoPlayer } from "@/components/PartyVideoPlayer";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -77,6 +78,13 @@ export default function Home() {
                   {t.explore}
                   <ArrowLeft size={20} className="rtl:rotate-180" />
                 </Link>
+                <a 
+                  href="#party-video" 
+                  className="inline-flex items-center gap-2 bg-jcp-gold/15 hover:bg-jcp-gold text-jcp-gold hover:text-slate-950 border border-jcp-gold/40 px-6 py-4 rounded-md font-bold font-almarai transition-all shadow-sm"
+                >
+                  <Play size={18} className="fill-current" />
+                  <span>{isAr ? "شاهد الفيلم التعريفي" : "Watch Film"}</span>
+                </a>
                 <Link 
                   href="/about" 
                   className="inline-flex items-center gap-2 bg-white/10 text-white px-8 py-4 rounded-md font-bold font-almarai hover:bg-white/20 backdrop-blur-sm transition-colors border border-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
@@ -197,6 +205,28 @@ export default function Home() {
                </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Featured Party & Academy Video Showcase */}
+      <section id="party-video" className="py-16 md:py-20 bg-slate-900 text-white relative overflow-hidden border-t border-b border-slate-800">
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-jcp-gold via-transparent to-transparent pointer-events-none"></div>
+        <div className="container mx-auto px-4 max-w-5xl relative z-10">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jcp-gold/10 border border-jcp-gold/30 text-jcp-gold text-sm font-bold font-almarai mb-3">
+              <span>{isAr ? "الإنتاج الإعلامي والوثائقي الرسمي" : "Official Media Documentary"}</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold font-readex text-white mb-4">
+              {isAr ? "شاهد مسيرة ورسالة حزب المحافظين الأردني" : "Watch the JCP Journey & Vision"}
+            </h2>
+            <p className="text-slate-300 font-almarai text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+              {isAr 
+                ? "فيلم تعريفي يوثق هوية الحزب الوطنية وثوابته الراسخة، ورؤية الأكاديمية الحزبية في إعداد وتأهيل القيادات الشبابية." 
+                : "An introductory documentary illustrating party identity, national constants, and academy vision."}
+            </p>
+          </div>
+
+          <PartyVideoPlayer isAr={isAr} />
         </div>
       </section>
 

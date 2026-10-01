@@ -7,7 +7,8 @@ import { galleryData } from "@/data/gallery";
 import { newsData, NewsItem } from "@/data/news";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Newspaper, Image as ImageIcon, Calendar, Tag, ChevronRight, ChevronLeft, X, ArrowLeft } from "lucide-react";
+import { Newspaper, Image as ImageIcon, Calendar, Tag, ChevronRight, ChevronLeft, X, ArrowLeft, Film } from "lucide-react";
+import { PartyVideoPlayer } from "@/components/PartyVideoPlayer";
 
 function NewsGalleryContent() {
   const { language } = useLanguage();
@@ -174,9 +175,35 @@ function NewsGalleryContent() {
             initial={{ opacity: 0, y: 15 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.3 }}
-            className="space-y-8"
+            className="space-y-12"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Featured Official Documentary Film */}
+            <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-7 bg-jcp-red rounded-full"></span>
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold font-readex text-jcp-navy dark:text-white">
+                    {isAr ? "الفيلم الوثائقي والتعريفي الرسمي" : "Official Documentary Film"}
+                  </h2>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-almarai mt-0.5">
+                    {isAr ? "شاهد الإنتاج المرئي لحزب المحافظين الأردني ومسيرة الأكاديمية الحزبية" : "Watch the official documentary of JCP and Party Academy"}
+                  </p>
+                </div>
+              </div>
+
+              <PartyVideoPlayer isAr={isAr} />
+            </div>
+
+            {/* Photo Albums */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-7 bg-jcp-gold rounded-full"></span>
+                <h2 className="text-xl md:text-2xl font-bold font-readex text-jcp-navy dark:text-white">
+                  {isAr ? "معرض الصور والفعاليات الحزبية" : "Photo Gallery & Events"}
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {galleryData.map((asset, index) => {
                 const altText = isAr ? asset.alt : (asset.altEn || asset.alt);
                 return (
@@ -199,6 +226,7 @@ function NewsGalleryContent() {
                   </button>
                 );
               })}
+              </div>
             </div>
           </motion.div>
         )}
