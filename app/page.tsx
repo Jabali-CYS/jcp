@@ -209,19 +209,19 @@ export default function Home() {
       </section>
 
       {/* Featured Party & Academy Video Showcase */}
-      <section id="party-video" className="py-8 md:py-12 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden border-t border-b border-white/10">
+      <section id="party-video" className="py-6 md:py-8 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden border-t border-b border-white/10">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-jcp-gold via-transparent to-transparent pointer-events-none"></div>
-        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+        <div className="container mx-auto px-4 max-w-5xl relative z-10">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             
             {/* Column 1: Vertical Cinema Screen (9:16) */}
-            <div className="lg:col-span-5 flex justify-center order-1 lg:order-2">
+            <div className="lg:col-span-4 flex justify-center order-1 lg:order-2">
               <PartyVideoPlayer isAr={isAr} />
             </div>
 
             {/* Column 2: Narrative & Highlights */}
-            <div className="lg:col-span-7 space-y-4 lg:space-y-5 order-2 lg:order-1 text-right rtl:text-right ltr:text-left">
+            <div className="lg:col-span-8 space-y-3.5 sm:space-y-4 order-2 lg:order-1 text-right rtl:text-right ltr:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-jcp-gold/15 border border-jcp-gold/30 text-jcp-gold text-xs font-bold font-almarai">
                 <Sparkles className="w-3.5 h-3.5 text-jcp-gold" />
                 <span>{isAr ? "الإنتاج الإعلامي والوثائقي الرسمي" : "Official Documentary Film"}</span>
