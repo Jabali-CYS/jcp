@@ -7,7 +7,6 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { HeroImageRotator } from "@/components/HeroImageRotator";
 import { UpcomingTicker } from "@/components/UpcomingTicker";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
-import { TimelineSection } from "@/components/TimelineSection";
 import { PartyVideoPlayer } from "@/components/PartyVideoPlayer";
 
 export default function Home() {
@@ -343,9 +342,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Operational Plan Roadmap & Milestones */}
-      <TimelineSection isAr={isAr} />
 
       {/* Cadre & Graduate Testimonials */}
       <TestimonialsSection isAr={isAr} />

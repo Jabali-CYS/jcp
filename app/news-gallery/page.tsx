@@ -118,7 +118,7 @@ function NewsGalleryContent() {
             initial={{ opacity: 0, y: 15 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className={`grid gap-8 ${newsData.length === 1 ? 'max-w-2xl mx-auto w-full' : 'grid-cols-1 md:grid-cols-2'}`}
           >
             {newsData.map((item) => (
               <article 
