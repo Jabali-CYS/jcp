@@ -11,6 +11,8 @@ interface GallerySlide {
   titleEn: string;
   categoryAr: string;
   categoryEn: string;
+  fitMode?: 'cover' | 'contain';
+  positionClass?: string;
 }
 
 const SLIDES: GallerySlide[] = [
@@ -21,6 +23,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "JCP Leadership & Cadres Meeting",
     categoryAr: "فعاليات حزبية",
     categoryEn: "Party Activities",
+    fitMode: "contain",
   },
   {
     id: 2,
@@ -29,6 +32,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "Political & Policy Dialogues",
     categoryAr: "ندوات فكرية",
     categoryEn: "Symposiums",
+    fitMode: "cover",
   },
   {
     id: 3,
@@ -37,6 +41,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "Academy Interactive Workshops",
     categoryAr: "التدريب والتأهيل",
     categoryEn: "Training Sessions",
+    fitMode: "cover",
   },
   {
     id: 4,
@@ -45,6 +50,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "Building Future Leaders",
     categoryAr: "تمكين الشباب",
     categoryEn: "Youth Empowerment",
+    fitMode: "cover",
   },
   {
     id: 5,
@@ -53,6 +59,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "Graduation & Recognition Ceremony",
     categoryAr: "تكريم الإنجاز",
     categoryEn: "Achievements",
+    fitMode: "cover",
   },
   {
     id: 6,
@@ -61,6 +68,7 @@ const SLIDES: GallerySlide[] = [
     titleEn: "Conferences & Organized Field Work",
     categoryAr: "العمل الميداني",
     categoryEn: "Fieldwork",
+    fitMode: "contain",
   },
 ];
 
@@ -120,17 +128,38 @@ export function HeroImageRotator({ isAr = true }: { isAr?: boolean }) {
       <div className="relative h-72 sm:h-84 md:h-96 w-full flex items-center overflow-hidden rounded-2xl p-2 sm:p-3 bg-white/5 backdrop-blur-md border border-white/15 shadow-2xl">
         
         {/* Active Main Card (In Focus) */}
-        <div className="relative w-[78%] sm:w-[80%] h-full rounded-xl sm:rounded-2xl overflow-hidden border-2 border-jcp-gold/50 shadow-2xl z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            key={SLIDES[currentIndex].id}
-            src={SLIDES[currentIndex].src}
-            alt={isAr ? SLIDES[currentIndex].titleAr : SLIDES[currentIndex].titleEn}
-            className="w-full h-full object-cover object-center animate-fadeIn"
-          />
+        <div className="relative w-[78%] sm:w-[80%] h-full rounded-xl sm:rounded-2xl overflow-hidden border-2 border-jcp-gold/50 shadow-2xl z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group bg-slate-950">
+          {SLIDES[currentIndex].fitMode === 'contain' ? (
+            <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+              {/* Blurred Ambient Backdrop so card is fully filled aesthetically */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SLIDES[currentIndex].src}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-xl scale-125 opacity-40 select-none"
+              />
+              {/* Fully visible crisp uncropped foreground image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={SLIDES[currentIndex].id}
+                src={SLIDES[currentIndex].src}
+                alt={isAr ? SLIDES[currentIndex].titleAr : SLIDES[currentIndex].titleEn}
+                className="relative z-10 max-h-full max-w-full object-contain drop-shadow-2xl animate-fadeIn py-1"
+              />
+            </div>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={SLIDES[currentIndex].id}
+              src={SLIDES[currentIndex].src}
+              alt={isAr ? SLIDES[currentIndex].titleAr : SLIDES[currentIndex].titleEn}
+              className={`w-full h-full object-cover ${SLIDES[currentIndex].positionClass || 'object-center'} animate-fadeIn`}
+            />
+          )}
 
           {/* Gradients & Badges */}
-          <div className="absolute inset-0 bg-gradient-to-t from-jcp-navy/95 via-jcp-navy/30 to-transparent"></div>
+          <div className={`absolute inset-0 pointer-events-none ${SLIDES[currentIndex].fitMode === 'contain' ? 'bg-gradient-to-t from-jcp-navy/90 via-transparent to-transparent' : 'bg-gradient-to-t from-jcp-navy/95 via-jcp-navy/30 to-transparent'}`}></div>
 
           {/* Top Badge */}
           <div className="absolute top-3 right-3 rtl:right-3 rtl:left-auto ltr:left-3 ltr:right-auto z-10">
@@ -141,11 +170,11 @@ export function HeroImageRotator({ isAr = true }: { isAr?: boolean }) {
           </div>
 
           {/* Bottom Caption */}
-          <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 z-10">
-            <h3 className="text-white text-base sm:text-lg font-bold font-readex line-clamp-1 drop-shadow-md">
+          <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 z-10 bg-gradient-to-t from-jcp-navy/95 via-jcp-navy/80 to-transparent">
+            <h3 className="text-white text-sm sm:text-base md:text-lg font-bold font-readex line-clamp-1 drop-shadow-md">
               {isAr ? SLIDES[currentIndex].titleAr : SLIDES[currentIndex].titleEn}
             </h3>
-            <p className="text-slate-300 text-xs mt-1 font-almarai flex items-center gap-2">
+            <p className="text-slate-300 text-xs mt-0.5 font-almarai flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-jcp-gold"></span>
               <span>الأكاديمية الحزبية – حزب المحافظين الأردني</span>
             </p>
@@ -156,15 +185,34 @@ export function HeroImageRotator({ isAr = true }: { isAr?: boolean }) {
         <div 
           onClick={nextSlide}
           title={isAr ? "اضغط لعرض الصورة التالية" : "Click to view next image"}
-          className="absolute -left-4 sm:-left-2 rtl:-left-4 rtl:sm:-left-2 ltr:-right-4 ltr:sm:-right-2 w-[42%] sm:w-[38%] h-[82%] sm:h-[85%] rounded-xl overflow-hidden border border-white/20 shadow-xl z-10 cursor-pointer transform scale-90 opacity-60 hover:opacity-85 hover:scale-95 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] filter blur-[1.2px] hover:blur-none"
+          className="absolute -left-4 sm:-left-2 rtl:-left-4 rtl:sm:-left-2 ltr:-right-4 ltr:sm:-right-2 w-[42%] sm:w-[38%] h-[82%] sm:h-[85%] rounded-xl overflow-hidden border border-white/20 shadow-xl z-10 cursor-pointer transform scale-90 opacity-60 hover:opacity-85 hover:scale-95 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] filter blur-[1.2px] hover:blur-none bg-slate-950"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            key={SLIDES[nextIndex].id}
-            src={SLIDES[nextIndex].src}
-            alt={isAr ? SLIDES[nextIndex].titleAr : SLIDES[nextIndex].titleEn}
-            className="w-full h-full object-cover object-center"
-          />
+          {SLIDES[nextIndex].fitMode === 'contain' ? (
+            <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SLIDES[nextIndex].src}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-40 select-none"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={SLIDES[nextIndex].id}
+                src={SLIDES[nextIndex].src}
+                alt={isAr ? SLIDES[nextIndex].titleAr : SLIDES[nextIndex].titleEn}
+                className="relative z-10 max-h-full max-w-full object-contain"
+              />
+            </div>
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={SLIDES[nextIndex].id}
+              src={SLIDES[nextIndex].src}
+              alt={isAr ? SLIDES[nextIndex].titleAr : SLIDES[nextIndex].titleEn}
+              className={`w-full h-full object-cover ${SLIDES[nextIndex].positionClass || 'object-center'}`}
+            />
+          )}
           <div className="absolute inset-0 bg-jcp-navy/40 hover:bg-transparent transition-colors"></div>
           
           {/* Subtle Peek Indicator */}

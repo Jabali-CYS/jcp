@@ -107,28 +107,28 @@ export default function Home() {
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex">1,200+</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex" dir="ltr">+1,200</div>
                 <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
                   {isAr ? "مستهدف التدريب والتأهيل" : "Target Trainees"}
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex">12</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex" dir="ltr">+12</div>
                 <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
                   {isAr ? "حقيبة تثقيفية معتمدة" : "Accredited Packages"}
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex">3</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-jcp-gold font-readex" dir="ltr">+3</div>
                 <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
                   {isAr ? "مستويات تأهيل قيادي" : "Leadership Levels"}
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex">100%</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-white font-readex" dir="ltr">100%</div>
                 <div className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
                   {isAr ? "شهادات رقمية موثقة QR" : "Verified QR Certificates"}
                 </div>
@@ -197,7 +197,7 @@ export default function Home() {
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                    {operationalTargets.map(target => (
                      <div key={target.id} className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors">
-                       <div className="text-3xl font-bold text-jcp-navy dark:text-white mb-2 transition-colors">{target.targetValue}</div>
+                       <div className="text-3xl font-bold text-jcp-navy dark:text-white mb-2 transition-colors" dir="ltr">{target.targetValue}</div>
                        <div className="text-sm text-slate-600 dark:text-slate-400 font-almarai font-medium transition-colors">{isAr ? target.label : target.labelEn}</div>
                      </div>
                    ))}

@@ -79,8 +79,8 @@ export const academyInfo: AcademyInfo = {
 
 export const operationalTargets: OperationalTarget[] = [
   { id: 'target-1', sourceStatus: 'SOURCE_VERIFIED', label: 'عضو حزبي مدرّب', labelEn: 'Trained Party Member', targetValue: '+300' },
-  { id: 'target-2', sourceStatus: 'SOURCE_VERIFIED', label: 'تغطية بالمحافظات', labelEn: 'Governorate Coverage', targetValue: '6' },
-  { id: 'target-3', sourceStatus: 'SOURCE_VERIFIED', label: 'مدرب معتمد', labelEn: 'Certified Trainer', targetValue: '10' },
+  { id: 'target-2', sourceStatus: 'SOURCE_VERIFIED', label: 'تغطية بالمحافظات', labelEn: 'Governorate Coverage', targetValue: '+6' },
+  { id: 'target-3', sourceStatus: 'SOURCE_VERIFIED', label: 'مدرب معتمد', labelEn: 'Certified Trainer', targetValue: '+10' },
   { id: 'target-4', sourceStatus: 'SOURCE_VERIFIED', label: 'تمثيل الشباب تحت 35 عامًا والنساء في البرامج', labelEn: 'Representation of Youth (<35) and Women', targetValue: '30% - 40%' }
 ];
 

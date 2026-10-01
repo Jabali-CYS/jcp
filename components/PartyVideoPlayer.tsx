@@ -104,13 +104,15 @@ export function PartyVideoPlayer({ isAr = true, className = "", autoPlayOnClick 
           /* Live HTML5 Video Player */
           <video
             ref={videoRef}
-            src="/videos/party-video.mp4"
+            src="https://kmgxyhccbxgsqyxuqffe.supabase.co/storage/v1/object/public/media/party-video.mp4"
             controls
+            autoPlay
             playsInline
-            preload="metadata"
+            preload="auto"
             className="w-full h-full object-contain bg-black"
             onEnded={() => setIsPlaying(false)}
           >
+            <source src="https://kmgxyhccbxgsqyxuqffe.supabase.co/storage/v1/object/public/media/party-video.mp4" type="video/mp4" />
             {isAr ? "متصفحك لا يدعم تشغيل الفيديو." : "Your browser does not support HTML5 video."}
           </video>
         )}

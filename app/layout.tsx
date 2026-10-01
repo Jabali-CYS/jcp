@@ -65,6 +65,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/academy-logo.png?v=2" type="image/png" />
         <link rel="shortcut icon" href="/academy-logo.png?v=2" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+        <link rel="preload" href="/party-logo.png" as="image" type="image/png" />
+        <link rel="preload" href="/academy-logo.png" as="image" type="image/png" />
         <script
           dangerouslySetInnerHTML={{
             __html: "if(typeof window!=='undefined'&&!window.__name){window.__name=function(t){return t};}if(typeof globalThis!=='undefined'&&!globalThis.__name){globalThis.__name=function(t){return t};}",

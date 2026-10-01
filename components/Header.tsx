@@ -70,6 +70,9 @@ export default function Header() {
                 alt={isAr ? "شعار الأكاديمية الحزبية" : "JCP Academy Logo"}
                 width={120} 
                 height={120} 
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="object-contain h-20 sm:h-24 md:h-28 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
               />
             </div>
@@ -175,6 +178,9 @@ export default function Header() {
                  alt={isAr ? "شعار حزب المحافظين الأردني" : "Jordanian Conservative Party Logo"}
                  width={100} 
                  height={100} 
+                 loading="eager"
+                 fetchPriority="high"
+                 decoding="async"
                  className="object-contain h-16 sm:h-20 md:h-24 w-auto transition-all mix-blend-multiply dark:mix-blend-normal"
                />
              </div>
