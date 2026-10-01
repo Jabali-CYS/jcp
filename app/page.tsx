@@ -211,88 +211,88 @@ export default function Home() {
       {/* Featured Party & Academy Video Showcase */}
       <section id="party-video" className="py-6 md:py-8 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden border-t border-b border-white/10">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-jcp-gold via-transparent to-transparent pointer-events-none"></div>
-        <div className="container mx-auto px-4 max-w-5xl relative z-10">
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             
             {/* Column 1: Vertical Cinema Screen (9:16) */}
-            <div className="lg:col-span-4 flex justify-center order-1 lg:order-2">
+            <div className="lg:col-span-5 flex justify-center order-1 lg:order-2">
               <PartyVideoPlayer isAr={isAr} />
             </div>
 
             {/* Column 2: Narrative & Highlights */}
-            <div className="lg:col-span-8 space-y-3.5 sm:space-y-4 order-2 lg:order-1 text-right rtl:text-right ltr:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-jcp-gold/15 border border-jcp-gold/30 text-jcp-gold text-xs font-bold font-almarai">
-                <Sparkles className="w-3.5 h-3.5 text-jcp-gold" />
+            <div className="lg:col-span-7 space-y-4 sm:space-y-5 order-2 lg:order-1 text-right rtl:text-right ltr:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-jcp-gold/15 border border-jcp-gold/30 text-jcp-gold text-xs sm:text-sm font-bold font-almarai">
+                <Sparkles className="w-4 h-4 text-jcp-gold" />
                 <span>{isAr ? "الإنتاج الإعلامي والوثائقي الرسمي" : "Official Documentary Film"}</span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold font-readex text-white leading-snug">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-readex text-white leading-tight">
                 {isAr ? "مسيرة حزب المحافظين الأردني ورؤية الأكاديمية نحو المستقبل" : "The Journey of the Jordanian Conservative Party"}
               </h2>
 
-              <p className="text-slate-300 font-almarai text-xs sm:text-sm leading-relaxed">
+              <p className="text-slate-300 font-almarai text-sm sm:text-base lg:text-lg leading-relaxed">
                 {isAr 
                   ? "توثيق مرئي شامل يجسد الهوية الوطنية الأردنية الراسخة، ومسار التمكين الحزبي والبرامجي، ورؤية الأكاديمية في بناء وتأهيل الكوادر والقيادات الشبابية." 
                   : "A comprehensive visual documentary showcasing national identity, partisan empowerment, and youth leadership training."}
               </p>
 
               {/* Documentary Pillars */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                  <div className="font-bold text-white text-xs sm:text-sm font-readex flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-jcp-gold shrink-0"></span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm sm:text-base font-readex flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-jcp-gold shrink-0"></span>
                     <span>{isAr ? "الهوية والثوابت الوطنية" : "National Constants"}</span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-300 font-almarai leading-relaxed">
+                  <div className="text-xs sm:text-sm text-slate-300 font-almarai leading-relaxed">
                     {isAr ? "التمسك بالدولة والعرش الهاشمي والدستور كإطار جامع لكل الأردنيين." : "Adherence to state, constitution, and Hashemite leadership."}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                  <div className="font-bold text-white text-xs sm:text-sm font-readex flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-jcp-green shrink-0"></span>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm sm:text-base font-readex flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-jcp-green shrink-0"></span>
                     <span>{isAr ? "دولة المؤسسات والقانون" : "State of Law"}</span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-300 font-almarai leading-relaxed">
+                  <div className="text-xs sm:text-sm text-slate-300 font-almarai leading-relaxed">
                     {isAr ? "قوة الدولة تنبع من قوة مؤسساتها والمشاركة السياسية البرامجية الفاعلة." : "Strong institutions and programmatic political action."}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                  <div className="font-bold text-white text-xs sm:text-sm font-readex flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-jcp-red shrink-0"></span>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm sm:text-base font-readex flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-jcp-red shrink-0"></span>
                     <span>{isAr ? "الأكاديمية والتمكين القيادي" : "Leadership Academy"}</span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-300 font-almarai leading-relaxed">
+                  <div className="text-xs sm:text-sm text-slate-300 font-almarai leading-relaxed">
                     {isAr ? "تأهيل وتدريب الكوادر الحزبية والشبابية وفق 12 حقيبة ثقافية معتمدة." : "Training party cadres across 12 accredited packages."}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
-                  <div className="font-bold text-white text-xs sm:text-sm font-readex flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0"></span>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm sm:text-base font-readex flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
                     <span>{isAr ? "الميدان والمحافظات" : "Governorates & Fieldwork"}</span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-300 font-almarai leading-relaxed">
+                  <div className="text-xs sm:text-sm text-slate-300 font-almarai leading-relaxed">
                     {isAr ? "حضور فاعل وتواصل دائم ومباشر مع المواطنين في كافة أرجاء المملكة." : "Active presence and ongoing engagement in all governorates."}
                   </div>
                 </div>
               </div>
 
               {/* Bottom CTAs */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className="pt-3 flex flex-wrap items-center gap-3.5">
                 <Link
                   href="/programs"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-jcp-gold to-amber-400 text-slate-950 font-bold font-almarai hover:brightness-110 shadow-lg shadow-jcp-gold/20 transition-all flex items-center gap-2 text-xs sm:text-sm"
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-jcp-gold to-amber-400 text-slate-950 font-bold font-almarai hover:brightness-110 shadow-lg shadow-jcp-gold/20 transition-all flex items-center gap-2 text-sm sm:text-base"
                 >
-                  <GraduationCap className="w-4 h-4" />
+                  <GraduationCap className="w-5 h-5" />
                   <span>{isAr ? "استكشف البرامج والدورات" : "Explore Programs"}</span>
                 </Link>
 
                 <Link
                   href="/packages"
-                  className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold font-almarai transition-colors text-xs sm:text-sm"
+                  className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold font-almarai transition-colors text-sm sm:text-base"
                 >
                   <span>{isAr ? "الحقائب التثقيفية (12)" : "12 Training Packages"}</span>
                 </Link>

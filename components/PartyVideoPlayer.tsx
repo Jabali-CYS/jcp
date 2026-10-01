@@ -32,7 +32,7 @@ export function PartyVideoPlayer({ isAr = true, className = "", autoPlayOnClick 
   };
 
   return (
-    <div className={`relative w-full max-w-[265px] sm:max-w-[280px] md:max-w-[290px] max-h-[480px] sm:max-h-[505px] mx-auto rounded-3xl overflow-hidden border-2 border-jcp-gold/60 shadow-2xl shadow-jcp-gold/20 bg-slate-950 text-white group ${className}`}>
+    <div className={`relative w-full max-w-[320px] sm:max-w-[340px] lg:max-w-[360px] mx-auto rounded-3xl overflow-hidden border-2 border-jcp-gold/60 shadow-2xl shadow-jcp-gold/20 bg-slate-950 text-white group ${className}`}>
       {/* Ambient Outer Glow */}
       <div className="absolute -inset-1 bg-gradient-to-tr from-jcp-gold/30 via-transparent to-jcp-red/20 rounded-3xl blur-xl pointer-events-none -z-10 group-hover:from-jcp-gold/45 transition-all duration-700"></div>
 
@@ -41,7 +41,7 @@ export function PartyVideoPlayer({ isAr = true, className = "", autoPlayOnClick 
         {!isPlaying ? (
           /* Vertical Cover Poster & Play Trigger */
           <div 
-            className="absolute inset-0 z-10 flex flex-col items-center justify-between p-4 sm:p-5 text-center cursor-pointer select-none" 
+            className="absolute inset-0 z-10 flex flex-col items-center justify-between p-5 sm:p-6 text-center cursor-pointer select-none" 
             onClick={handleStartPlay}
           >
             {/* Ambient Background with subtle blur */}
@@ -50,52 +50,52 @@ export function PartyVideoPlayer({ isAr = true, className = "", autoPlayOnClick 
             {/* Watermark Logo Background */}
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none z-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/party-logo.png" alt="" className="w-64 h-64 object-contain scale-125" />
+              <img src="/party-logo.png" alt="" className="w-72 h-72 object-contain scale-125" />
             </div>
 
             {/* Top Badges */}
             <div className="relative z-10 w-full flex items-center justify-between gap-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-jcp-gold/15 border border-jcp-gold/40 text-jcp-gold text-[11px] font-bold font-almarai shadow-md backdrop-blur-md">
-                <Sparkles className="w-3 h-3 text-jcp-gold" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-jcp-gold/15 border border-jcp-gold/40 text-jcp-gold text-xs font-bold font-almarai shadow-md backdrop-blur-md">
+                <Sparkles className="w-3.5 h-3.5 text-jcp-gold" />
                 <span>{t.badge}</span>
               </span>
 
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/60 border border-white/15 text-slate-300 text-[11px] font-almarai backdrop-blur-md">
-                <Clock className="w-3 h-3 text-jcp-gold" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 border border-white/15 text-slate-300 text-xs font-almarai backdrop-blur-md">
+                <Clock className="w-3.5 h-3.5 text-jcp-gold" />
                 <span dir="ltr">5:58</span>
               </span>
             </div>
 
             {/* Center: Party Emblem + Glowing Royal Play Button */}
-            <div className="relative z-10 flex flex-col items-center my-auto py-2">
+            <div className="relative z-10 flex flex-col items-center my-auto py-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
                 src="/party-logo.png" 
                 alt="حزب المحافظين الأردني" 
-                className="w-18 h-18 sm:w-20 sm:h-20 object-contain drop-shadow-2xl mb-3.5 transform group-hover:scale-105 transition-transform duration-500" 
+                className="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl mb-4 transform group-hover:scale-105 transition-transform duration-500" 
               />
 
               <button
                 type="button"
                 aria-label={t.playBtn}
-                className="relative w-15 h-15 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-jcp-gold via-amber-400 to-amber-200 text-slate-950 flex items-center justify-center shadow-2xl shadow-jcp-gold/50 transform group-hover:scale-110 group-hover:shadow-jcp-gold/70 transition-all duration-300 ring-4 ring-white/20 active:scale-95"
+                className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-jcp-gold via-amber-400 to-amber-200 text-slate-950 flex items-center justify-center shadow-2xl shadow-jcp-gold/50 transform group-hover:scale-110 group-hover:shadow-jcp-gold/70 transition-all duration-300 ring-4 ring-white/20 active:scale-95"
               >
-                <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-current translate-x-0.5 rtl:-translate-x-0.5" />
+                <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-current translate-x-0.5 rtl:-translate-x-0.5" />
                 {/* Pulsing golden wave ring */}
                 <span className="absolute inset-0 rounded-full border-2 border-jcp-gold animate-ping opacity-40 pointer-events-none"></span>
               </button>
 
-              <span className="mt-3 text-xs font-bold font-almarai text-jcp-gold tracking-wide">
+              <span className="mt-3.5 text-xs sm:text-sm font-bold font-almarai text-jcp-gold tracking-wide">
                 {t.watchNow}
               </span>
             </div>
 
             {/* Bottom Captions */}
-            <div className="relative z-10 w-full pt-2.5 border-t border-white/10">
-              <h3 className="text-sm sm:text-base font-bold font-readex text-white drop-shadow-md leading-tight">
+            <div className="relative z-10 w-full pt-3 border-t border-white/10">
+              <h3 className="text-base sm:text-lg font-bold font-readex text-white drop-shadow-md leading-tight">
                 {t.title}
               </h3>
-              <p className="text-[11px] text-slate-300 font-almarai mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-300 font-almarai mt-1">
                 {t.academy}
               </p>
             </div>
