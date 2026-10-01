@@ -191,7 +191,9 @@ function NewsGalleryContent() {
                 </div>
               </div>
 
-              <PartyVideoPlayer isAr={isAr} />
+              <div className="flex justify-center py-4 bg-slate-950/40 dark:bg-slate-950/80 rounded-2xl border border-slate-100 dark:border-slate-800">
+                <PartyVideoPlayer isAr={isAr} />
+              </div>
             </div>
 
             {/* Photo Albums */}

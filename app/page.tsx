@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { academyInfo, operationalTargets, trainingPackages } from "@/data/mock";
-import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare, Play } from "lucide-react";
+import { ArrowLeft, BookOpen, Target, Building2, GraduationCap, TrendingUp, Newspaper, Briefcase, Laptop, MessageSquare, Play, Sparkles } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { HeroImageRotator } from "@/components/HeroImageRotator";
 import { UpcomingTicker } from "@/components/UpcomingTicker";
@@ -209,24 +209,100 @@ export default function Home() {
       </section>
 
       {/* Featured Party & Academy Video Showcase */}
-      <section id="party-video" className="py-16 md:py-20 bg-slate-900 text-white relative overflow-hidden border-t border-b border-slate-800">
+      {/* Featured Party & Academy Video Showcase */}
+      <section id="party-video" className="py-16 md:py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden border-t border-b border-white/10">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-jcp-gold via-transparent to-transparent pointer-events-none"></div>
-        <div className="container mx-auto px-4 max-w-5xl relative z-10">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jcp-gold/10 border border-jcp-gold/30 text-jcp-gold text-sm font-bold font-almarai mb-3">
-              <span>{isAr ? "الإنتاج الإعلامي والوثائقي الرسمي" : "Official Media Documentary"}</span>
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            {/* Column 1: Vertical Cinema Screen (9:16) */}
+            <div className="lg:col-span-5 flex justify-center order-1 lg:order-2">
+              <PartyVideoPlayer isAr={isAr} />
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold font-readex text-white mb-4">
-              {isAr ? "شاهد مسيرة ورسالة حزب المحافظين الأردني" : "Watch the JCP Journey & Vision"}
-            </h2>
-            <p className="text-slate-300 font-almarai text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              {isAr 
-                ? "فيلم تعريفي يوثق هوية الحزب الوطنية وثوابته الراسخة، ورؤية الأكاديمية الحزبية في إعداد وتأهيل القيادات الشبابية." 
-                : "An introductory documentary illustrating party identity, national constants, and academy vision."}
-            </p>
+
+            {/* Column 2: Narrative & Highlights */}
+            <div className="lg:col-span-7 space-y-6 order-2 lg:order-1 text-right rtl:text-right ltr:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jcp-gold/15 border border-jcp-gold/30 text-jcp-gold text-xs sm:text-sm font-bold font-almarai">
+                <Sparkles className="w-4 h-4 text-jcp-gold" />
+                <span>{isAr ? "الإنتاج الإعلامي والوثائقي الرسمي" : "Official Documentary Film"}</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-readex text-white leading-tight">
+                {isAr ? "مسيرة حزب المحافظين الأردني ورؤية الأكاديمية نحو المستقبل" : "The Journey of the Jordanian Conservative Party"}
+              </h2>
+
+              <p className="text-slate-300 font-almarai text-base sm:text-lg leading-relaxed">
+                {isAr 
+                  ? "توثيق مرئي شامل يجسد الهوية الوطنية الأردنية الراسخة، ومسار التمكين الحزبي والبرامجي، ورؤية الأكاديمية في بناء وتأهيل الكوادر والقيادات الشبابية." 
+                  : "A comprehensive visual documentary showcasing national identity, partisan empowerment, and youth leadership training."}
+              </p>
+
+              {/* Documentary Pillars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm font-readex flex items-center gap-2 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-jcp-gold"></span>
+                    <span>{isAr ? "الهوية والثوابت الوطنية" : "National Constants"}</span>
+                  </div>
+                  <div className="text-xs text-slate-300 font-almarai leading-relaxed">
+                    {isAr ? "التمسك بالدولة والعرش الهاشمي والدستور كإطار جامع لكل الأردنيين." : "Adherence to state, constitution, and Hashemite leadership."}
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm font-readex flex items-center gap-2 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-jcp-green"></span>
+                    <span>{isAr ? "دولة المؤسسات والقانون" : "State of Law"}</span>
+                  </div>
+                  <div className="text-xs text-slate-300 font-almarai leading-relaxed">
+                    {isAr ? "قوة الدولة تنبع من قوة مؤسساتها والمشاركة السياسية البرامجية الفاعلة." : "Strong institutions and programmatic political action."}
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm font-readex flex items-center gap-2 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-jcp-red"></span>
+                    <span>{isAr ? "الأكاديمية والتمكين القيادي" : "Leadership Academy"}</span>
+                  </div>
+                  <div className="text-xs text-slate-300 font-almarai leading-relaxed">
+                    {isAr ? "تأهيل وتدريب الكوادر الحزبية والشبابية وفق 12 حقيبة ثقافية معتمدة." : "Training party cadres across 12 accredited packages."}
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 hover:border-jcp-gold/40 transition-colors">
+                  <div className="font-bold text-white text-sm font-readex flex items-center gap-2 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span>{isAr ? "الميدان والمحافظات" : "Governorates & Fieldwork"}</span>
+                  </div>
+                  <div className="text-xs text-slate-300 font-almarai leading-relaxed">
+                    {isAr ? "حضور فاعل وتواصل دائم ومباشر مع المواطنين في كافة أرجاء المملكة." : "Active presence and ongoing engagement in all governorates."}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom CTAs */}
+              <div className="pt-3 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/programs"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-jcp-gold to-amber-400 text-slate-950 font-bold font-almarai hover:brightness-110 shadow-lg shadow-jcp-gold/20 transition-all flex items-center gap-2 text-sm"
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span>{isAr ? "استكشف البرامج والدورات" : "Explore Programs"}</span>
+                </Link>
+
+                <Link
+                  href="/packages"
+                  className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-bold font-almarai transition-colors text-sm"
+                >
+                  <span>{isAr ? "الحقائب التثقيفية (12)" : "12 Training Packages"}</span>
+                </Link>
+              </div>
+
+            </div>
+
           </div>
 
-          <PartyVideoPlayer isAr={isAr} />
         </div>
       </section>
 
