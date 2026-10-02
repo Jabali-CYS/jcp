@@ -106,9 +106,9 @@ export function HeroImageRotator({ isAr = true }: { isAr?: boolean }) {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (diff > 45) {
-      isAr ? prevSlide() : nextSlide();
+      if (isAr) { prevSlide(); } else { nextSlide(); }
     } else if (diff < -45) {
-      isAr ? nextSlide() : prevSlide();
+      if (isAr) { nextSlide(); } else { prevSlide(); }
     }
     touchStartX.current = null;
   };

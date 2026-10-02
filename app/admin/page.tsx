@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { processApplication } from './actions'
+import ApplicationActionRow from './ApplicationActionRow'
 
 export const metadata = {
   title: 'لوحة تحكم الإدارة | JCP Academy',
@@ -73,51 +72,11 @@ export default async function AdminDashboardPage() {
                 const programSessions = sessions?.filter(s => s.program_id === app.program_id) || []
 
                 return (
-                  <div key={app.id} className="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                    <div className="mb-4">
-                      <h3 className="font-bold text-gray-900 dark:text-white font-cairo">المتدرب: {app.profiles?.full_name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-cairo">البرنامج: {app.programs?.title}</p>
-                      <p className="text-xs text-gray-500 font-cairo mt-1">تاريخ الطلب: {new Date(app.created_at).toLocaleDateString('ar-JO')}</p>
-                    </div>
-
-                    <form action={processApplication} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                      <input type="hidden" name="applicationId" value={app.id} />
-                      
-                      <div className="flex-1">
-                        <select 
-                          name="sessionId" 
-                          className="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-700 font-cairo"
-                          defaultValue=""
-                        >
-                          <option value="" disabled>-- اختر الجلسة للموافقة --</option>
-                          {programSessions.map((session: any) => (
-                            <option key={session.id} value={session.id}>
-                              {session.training_packages?.title} ({new Date(session.session_date).toLocaleDateString('ar-JO')}) - المدرب: {session.profiles?.full_name || 'غير محدد'}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <button 
-                          type="submit" 
-                          name="action" 
-                          value="approve" 
-                          className="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-700 font-cairo"
-                        >
-                          موافقة وتسجيل
-                        </button>
-                        <button 
-                          type="submit" 
-                          name="action" 
-                          value="reject"
-                          className="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 font-cairo"
-                        >
-                          رفض الطلب
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+                  <ApplicationActionRow 
+                    key={app.id} 
+                    app={app} 
+                    programSessions={programSessions} 
+                  />
                 )
               })}
             </div>

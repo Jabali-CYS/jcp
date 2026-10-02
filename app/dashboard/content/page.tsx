@@ -7,14 +7,6 @@ export const metadata = {
   title: 'المحتوى الرقمي | JCP Academy',
 }
 
-interface DigitalContent {
-  id: string
-  title: string
-  file_url: string
-  created_at: string
-  program_id: string
-}
-
 export default async function TraineeDigitalContentPage() {
   const supabase = await createClient()
 

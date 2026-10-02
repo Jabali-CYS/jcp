@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 
-import { Menu, X, Moon, Sun, ChevronDown, Globe, MapPin } from "lucide-react";
+import { Menu, X, Moon, Sun, ChevronDown, Globe, MapPin, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useLanguage } from "./LanguageProvider";
 import { usePathname } from "next/navigation";
 import { FacebookIcon } from "./icons/FacebookIcon";
-
-
+import { createClient } from "@/lib/supabase/client";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,10 +18,49 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const { language, setLanguage } = useLanguage();
   const pathname = usePathname();
+  const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user) {
+        setUser(data.user);
+        supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', data.user.id)
+          .maybeSingle()
+          .then(({ data: rData }) => {
+            setIsAdmin(rData?.role === 'admin');
+          });
+      } else {
+        setUser(null);
+        setIsAdmin(false);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .maybeSingle()
+          .then(({ data: rData }) => {
+            setIsAdmin(rData?.role === 'admin');
+          });
+      } else {
+        setUser(null);
+        setIsAdmin(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Close menus when route changes
@@ -154,13 +192,38 @@ export default function Header() {
             <button onClick={() => setLanguage('en')} className={`font-bold focus:outline-none focus:underline ${!isAr ? 'text-jcp-navy dark:text-white' : 'hover:text-jcp-navy dark:hover:text-white transition-colors'}`} aria-label="English Language">EN</button>
           </div>
           
-          <div className="hidden md:block border-e border-slate-200 dark:border-slate-700 pe-4">
-             <Link 
-               href="/login" 
-               className="text-sm bg-jcp-navy text-white px-5 py-2.5 rounded-md font-almarai font-bold hover:bg-jcp-green transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jcp-navy shadow-sm"
-             >
-               {t.login}
-             </Link>
+          <div className="hidden md:flex items-center gap-2 border-e border-slate-200 dark:border-slate-700 pe-4">
+             {isAdmin ? (
+               <div className="flex items-center gap-2">
+                 <Link 
+                   href="/admin" 
+                   className="text-xs lg:text-sm bg-gradient-to-r from-amber-500 via-gold-500 to-amber-600 text-slate-950 px-3.5 py-2 rounded-lg font-almarai font-black hover:brightness-105 transition-all shadow-sm flex items-center gap-1.5 border border-amber-400"
+                 >
+                   <Shield size={16} className="text-slate-950" />
+                   <span>{isAr ? "لوحة الإدارة" : "Admin Panel"}</span>
+                 </Link>
+                 <Link 
+                   href="/dashboard" 
+                   className="text-xs text-slate-700 dark:text-slate-300 font-almarai font-bold hover:text-jcp-navy dark:hover:text-white px-2 py-1 transition-colors"
+                 >
+                   {isAr ? "حسابي" : "Account"}
+                 </Link>
+               </div>
+             ) : user ? (
+               <Link 
+                 href="/dashboard" 
+                 className="text-sm bg-jcp-navy text-white px-5 py-2.5 rounded-md font-almarai font-bold hover:bg-jcp-green transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jcp-navy shadow-sm"
+               >
+                 {isAr ? "لوحة التحكم" : "Dashboard"}
+               </Link>
+             ) : (
+               <Link 
+                 href="/login" 
+                 className="text-sm bg-jcp-navy text-white px-5 py-2.5 rounded-md font-almarai font-bold hover:bg-jcp-green transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jcp-navy shadow-sm"
+               >
+                 {t.login}
+               </Link>
+             )}
           </div>
 
           {/* Social Links Snippet */}
@@ -220,9 +283,25 @@ export default function Header() {
               <Link href="/contact" className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-md">{t.contact}</Link>
               
               <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-2">
-                <Link href="/login" className="block text-center w-full bg-jcp-navy text-white px-4 py-3 rounded-md hover:bg-jcp-green transition-colors">
-                  {t.login}
-                </Link>
+                {isAdmin ? (
+                  <div className="space-y-2">
+                    <Link href="/admin" className="flex items-center justify-center gap-2 w-full bg-gold-500 text-slate-950 font-black px-4 py-3 rounded-md hover:bg-gold-400 transition-colors shadow">
+                      <Shield size={18} />
+                      <span>{isAr ? "لوحة الإدارة" : "Admin Panel"}</span>
+                    </Link>
+                    <Link href="/dashboard" className="block text-center w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-4 py-2.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-bold">
+                      {isAr ? "حسابي (لوحة المتدرب)" : "My Dashboard"}
+                    </Link>
+                  </div>
+                ) : user ? (
+                  <Link href="/dashboard" className="block text-center w-full bg-jcp-navy text-white px-4 py-3 rounded-md hover:bg-jcp-green transition-colors">
+                    {isAr ? "لوحة التحكم" : "Dashboard"}
+                  </Link>
+                ) : (
+                  <Link href="/login" className="block text-center w-full bg-jcp-navy text-white px-4 py-3 rounded-md hover:bg-jcp-green transition-colors">
+                    {t.login}
+                  </Link>
+                )}
               </div>
             </div>
           </motion.nav>

@@ -1,29 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { submitApplication } from '../actions'
-import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { CheckCircle, AlertCircle, XCircle, RefreshCw, Loader2 } from 'lucide-react'
 
 export default function ApplicationForm({ programId, existingApplication }: { programId: string, existingApplication: any }) {
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [submittedStatus, setSubmittedStatus] = useState<string | null>(
+    existingApplication ? existingApplication.status : null
+  )
 
-  if (existingApplication || success) {
-    return (
-      <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-2xl border border-green-100 dark:border-green-800 flex flex-col items-center justify-center text-center">
-        <CheckCircle className="w-12 h-12 text-green-500 mb-3" />
-        <h3 className="text-lg font-bold text-green-800 dark:text-green-300 font-kufi">
-          تم تقديم طلبك بنجاح
-        </h3>
-        <p className="text-sm text-green-600 dark:text-green-400 font-cairo mt-1">
-          حالة الطلب: {existingApplication?.status === 'approved' ? 'مقبول' : existingApplication?.status === 'rejected' ? 'مرفوض' : 'قيد المراجعة'}
-        </p>
-      </div>
-    )
+  // Handle re-applying when an application is rejected
+  const handleReapply = async () => {
+    setIsPending(true)
+    setError(null)
+
+    const formData = new FormData()
+    formData.set('programId', programId)
+
+    const result = await submitApplication(formData)
+
+    if (result.error) {
+      setError(result.error)
+    } else {
+      setSubmittedStatus('pending')
+    }
+
+    setIsPending(false)
   }
 
+  // Handle first-time submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsPending(true)
@@ -35,10 +42,68 @@ export default function ApplicationForm({ programId, existingApplication }: { pr
     if (result.error) {
       setError(result.error)
     } else {
-      setSuccess(true)
+      setSubmittedStatus('pending')
     }
     
     setIsPending(false)
+  }
+
+  // If application was rejected, show rejected status with prominent Re-apply button
+  if (submittedStatus === 'rejected') {
+    return (
+      <div className="bg-rose-50 dark:bg-rose-950/30 p-6 rounded-2xl border-2 border-rose-200 dark:border-rose-900/50 flex flex-col items-center justify-center text-center shadow-sm">
+        <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-3">
+          <XCircle className="w-7 h-7" />
+        </div>
+        <h3 className="text-lg font-bold text-rose-800 dark:text-rose-200 font-kufi">
+          حالة الطلب: مرفوض
+        </h3>
+        <p className="text-sm text-rose-700 dark:text-rose-300 font-cairo mt-2 mb-4 max-w-md leading-relaxed">
+          نعتذر، لم يتم قبول طلبك السابق لهذا البرنامج. يمكنك مراجعة التفاصيل والشروط وإعادة تقديم طلب جديد للمراجعة من قبل إدارة الأكاديمية.
+        </p>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 text-xs rounded-xl flex items-center gap-2 font-cairo w-full max-w-sm">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={handleReapply}
+          disabled={isPending}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white text-sm font-bold rounded-xl shadow-md transition-all disabled:opacity-50 font-cairo hover:shadow-lg"
+        >
+          {isPending ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>جاري إعادة التقديم...</span>
+            </>
+          ) : (
+            <>
+              <RefreshCw className="w-4 h-4" />
+              <span>إعادة التقديم الآن</span>
+            </>
+          )}
+        </button>
+      </div>
+    )
+  }
+
+  // If application exists and is approved or pending
+  if (submittedStatus === 'approved' || submittedStatus === 'pending') {
+    return (
+      <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-2xl border border-green-100 dark:border-green-800 flex flex-col items-center justify-center text-center">
+        <CheckCircle className="w-12 h-12 text-green-500 mb-3" />
+        <h3 className="text-lg font-bold text-green-800 dark:text-green-300 font-kufi">
+          تم تقديم طلبك بنجاح
+        </h3>
+        <p className="text-sm text-green-600 dark:text-green-400 font-cairo mt-1">
+          حالة الطلب: {submittedStatus === 'approved' ? 'مقبول' : 'قيد المراجعة'}
+        </p>
+      </div>
+    )
   }
 
   return (
@@ -63,7 +128,7 @@ export default function ApplicationForm({ programId, existingApplication }: { pr
         <button
           type="submit"
           disabled={isPending}
-          className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed font-cairo"
+          className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed font-cairo shadow-sm"
         >
           {isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />

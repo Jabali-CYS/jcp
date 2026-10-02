@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, CheckCircle, Clock, XCircle, BookOpen, FileText, Award, User, ClipboardList } from 'lucide-react'
+import { Calendar, CheckCircle, Clock, XCircle, BookOpen, FileText, Award, User, ClipboardList, Shield, ArrowLeft } from 'lucide-react'
 
 export const metadata = {
   title: 'لوحة المعلومات | JCP Academy',
@@ -15,6 +15,14 @@ export default async function DashboardPage() {
   if (!user) {
     redirect('/login')
   }
+
+  // Check admin role
+  const { data: roleData } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
+  const isAdmin = roleData?.role === 'admin'
 
   // Fetch profile for the welcome message
   const { data: profile } = await supabase
@@ -79,6 +87,34 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen pt-32 pb-20 bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Admin Quick Access Banner */}
+        {isAdmin && (
+          <div className="bg-gradient-to-r from-slate-900 via-jcp-navy to-slate-900 border-2 border-gold-500/60 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl bg-gold-500/20 border border-gold-400/40 flex items-center justify-center text-gold-400 shrink-0">
+                <Shield className="w-8 h-8" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-gold-400 text-slate-950 font-cairo">حساب مسؤول (أدمن)</span>
+                  <span className="text-xs text-slate-300 font-cairo">صلاحيات الإدارة مفعلة</span>
+                </div>
+                <h2 className="text-xl font-bold font-kufi text-white mt-1">لوحة تحكم الإدارة العامة</h2>
+                <p className="text-sm font-cairo text-slate-300 mt-1">
+                  يمكنك إدارة طلبات الالتحاق المعلقة، اعتماد المقبولين، إصدار الشهادات، وإدارة البرامج التدريبية مباشرة.
+                </p>
+              </div>
+            </div>
+            <Link 
+              href="/admin" 
+              className="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-slate-950 font-bold font-cairo rounded-xl shadow-lg transition-transform hover:scale-105"
+            >
+              <span>الانتقال للوحة الإدارة</span>
+              <ArrowLeft className="w-5 h-5 rtl:rotate-0 ltr:rotate-180" />
+            </Link>
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white font-kufi">
@@ -88,9 +124,18 @@ export default async function DashboardPage() {
               هنا يمكنك متابعة طلباتك وبرامجك التدريبية والوصول إلى المحتوى الرقمي.
             </p>
           </div>
-          <div>
-            <Link href="/dashboard/profile" className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 font-bold font-cairo hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <User className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Link 
+                href="/admin" 
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-gold-600 hover:from-amber-700 hover:to-gold-700 text-white font-bold font-cairo rounded-xl shadow-md transition-all text-sm"
+              >
+                <Shield className="w-4 h-4" />
+                لوحة الإدارة
+              </Link>
+            )}
+            <Link href="/dashboard/profile" className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 font-bold font-cairo hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
+              <User className="w-4 h-4" />
               الملف الشخصي
             </Link>
           </div>
@@ -149,6 +194,17 @@ export default async function DashboardPage() {
                       <Calendar className="w-3 h-3" />
                       <span>تاريخ الطلب: {new Date(app.created_at).toLocaleDateString('ar-JO')}</span>
                     </div>
+                    {app.status === 'rejected' && app.programs?.id && (
+                      <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+                        <span className="text-xs text-rose-500 font-cairo font-semibold">تم رفض هذا الطلب</span>
+                        <Link 
+                          href={`/programs/${app.programs.id}`}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-xs font-bold rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors font-cairo"
+                        >
+                          إعادة التقديم الآن ←
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

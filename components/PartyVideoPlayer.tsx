@@ -15,11 +15,13 @@ export function PartyVideoPlayer({ isAr = true, className = "", autoPlayOnClick 
 
   const handleStartPlay = () => {
     setIsPlaying(true);
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.play().catch((err) => console.log("Video play error:", err));
-      }
-    }, 100);
+    if (autoPlayOnClick) {
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play().catch((err) => console.log("Video play error:", err));
+        }
+      }, 100);
+    }
   };
 
   const t = {

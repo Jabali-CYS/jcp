@@ -5,8 +5,9 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const rawNext = searchParams.get('next') || '/dashboard'
-  // Strict internal path validation: must start with single '/' to prevent open redirect
-  const next = (rawNext.startsWith('/') && !rawNext.startsWith('//')) ? rawNext : '/dashboard'
+  // Strict internal path validation: must start with single '/', no double slashes, and no backslashes
+  const isSafeInternal = rawNext.startsWith('/') && !rawNext.startsWith('//') && !rawNext.includes('\\') && !rawNext.includes('\0')
+  const next = isSafeInternal ? rawNext : '/dashboard'
 
   if (code) {
     const supabase = await createClient()

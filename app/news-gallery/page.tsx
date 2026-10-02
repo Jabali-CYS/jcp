@@ -7,7 +7,7 @@ import { galleryData } from "@/data/gallery";
 import { newsData, NewsItem } from "@/data/news";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Newspaper, Image as ImageIcon, Calendar, Tag, ChevronRight, ChevronLeft, X, ArrowLeft, Film } from "lucide-react";
+import { Newspaper, Image as ImageIcon, Calendar, Tag, ChevronRight, ChevronLeft, X, ArrowLeft } from "lucide-react";
 import { PartyVideoPlayer } from "@/components/PartyVideoPlayer";
 
 function NewsGalleryContent() {
@@ -17,18 +17,11 @@ function NewsGalleryContent() {
   const router = useRouter();
 
   const tabParam = searchParams.get('tab');
-  const [activeTab, setActiveTab] = useState<'news' | 'gallery'>(tabParam === 'gallery' ? 'gallery' : 'news');
+  const activeTab: 'news' | 'gallery' = tabParam === 'gallery' ? 'gallery' : 'news';
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
-  useEffect(() => {
-    if (tabParam === 'gallery' || tabParam === 'news') {
-      setActiveTab(tabParam);
-    }
-  }, [tabParam]);
-
   const switchTab = (tab: 'news' | 'gallery') => {
-    setActiveTab(tab);
     router.replace(`/news-gallery?tab=${tab}`, { scroll: false });
   };
 

@@ -41,6 +41,7 @@ export async function login(formData: FormData) {
       return { error: 'حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة لاحقاً.' }
     }
 
+    let userRole = 'trainee'
     // Self-healing check: Ensure authenticated user has a profile and trainee role if missing
     if (authData?.user) {
       try {
@@ -73,6 +74,8 @@ export async function login(formData: FormData) {
               user_id: userId,
               role: 'trainee',
             })
+          } else {
+            userRole = existingRole.role
           }
         }
       } catch (healingErr) {
@@ -81,7 +84,11 @@ export async function login(formData: FormData) {
     }
 
     revalidatePath('/', 'layout')
-    redirect('/dashboard')
+    if (userRole === 'admin') {
+      redirect('/admin')
+    } else {
+      redirect('/dashboard')
+    }
   } catch (error: any) {
     if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error

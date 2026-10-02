@@ -15,8 +15,10 @@ export default function SkillsPage() {
         <h1 className="text-2xl font-bold font-readex text-jcp-navy dark:text-white mb-4">
           {isAr ? "تطوير المهارات" : "Skills Development"}
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 font-almarai">
-          {isAr ? "هذا القسم قيد الإنشاء حالياً..." : "This section is currently under construction..."}
+        <p className="text-slate-600 dark:text-slate-400 font-almarai text-base leading-relaxed">
+          {isAr 
+            ? "نعمل على تطوير المهارات بعدة برامج وسيتم عرضها قريباً" 
+            : "We are developing skills through several specialized programs, which will be presented soon."}
         </p>
       </div>
     </div>
