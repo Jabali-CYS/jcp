@@ -17,7 +17,7 @@ export default async function ProgramsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="min-h-screen pt-32 pb-20 bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen pt-32 pb-20 bg-transparent px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white font-kufi">

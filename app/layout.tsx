@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/components/LanguageProvider";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { InteractiveBackground } from "@/components/InteractiveBackground";
 import { createClient } from "@/lib/supabase/server";
 
 const readexPro = Readex_Pro({
@@ -93,11 +94,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
       </head>
-      <body suppressHydrationWarning className="min-h-full flex flex-col font-readex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+      <body suppressHydrationWarning className="min-h-full flex flex-col font-readex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 relative">
         <LanguageProvider>
           <ThemeProvider>
+            <InteractiveBackground />
             <Header initialUser={initialUser} initialIsAdmin={initialIsAdmin} />
-            <main className="flex-1">
+            <main className="flex-1 relative z-10">
               {children}
             </main>
             <Footer />

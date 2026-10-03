@@ -25,7 +25,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 lg:py-20 transition-colors">
+    <div className="min-h-screen bg-transparent py-12 lg:py-20 transition-colors">
       <div className="container mx-auto px-4 max-w-5xl">
         <header className="mb-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-jcp-navy dark:text-white mb-6 font-readex transition-colors">

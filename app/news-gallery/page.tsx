@@ -58,7 +58,7 @@ function NewsGalleryContent() {
   }, [selectedPhotoIndex, handleNextPhoto, handlePrevPhoto, handleClosePhoto, isAr]);
 
   return (
-    <div className="min-h-screen pt-32 pb-24 bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen pt-32 pb-24 bg-transparent px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Header */}
         <header className="text-center space-y-4">

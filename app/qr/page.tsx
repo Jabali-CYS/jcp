@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function QrPage() {
   return (
-    <div className="min-h-screen pt-32 pb-20 bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen pt-32 pb-20 bg-transparent px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-xl mx-auto text-center space-y-8">
         
         {/* Header Badge */}
