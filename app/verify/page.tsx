@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { Award, CheckCircle2, XCircle, Calendar, User, BookOpen, ShieldCheck } from 'lucide-react'
+import { Award, XCircle } from 'lucide-react'
 import Link from 'next/link'
+import CertificateView from '@/components/CertificateView'
 
 export const metadata = {
   title: 'التحقق من صحة الشهادة | الأكاديمية الحزبية',
@@ -92,62 +93,29 @@ async function VerifyContent({ serial }: { serial?: string }) {
     month: 'long',
     day: 'numeric',
   })
-  const typeText = cert.type === 'completion' ? 'شهادة إتمام دورة تدريبية' : 'شهادة مشاركة في دورة تدريبية'
+
+  let qrDataUrl = ''
+  try {
+    const QRCode = (await import('qrcode')).default
+    qrDataUrl = await QRCode.toDataURL(`https://jcpacademy.com/verify?serial=${encodeURIComponent(cert.serial_number)}`, {
+      margin: 1,
+      width: 160,
+      color: { dark: '#0e1e38', light: '#ffffff' },
+    })
+  } catch (qrErr) {
+    console.warn('QR generation in verify page failed:', qrErr)
+  }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-lg border-2 border-emerald-500/40 text-right max-w-xl mx-auto space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded-2xl flex items-center justify-center">
-            <CheckCircle2 className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-cairo flex items-center gap-1">
-              <ShieldCheck className="w-4 h-4" />
-              وثيقة معتمدة وموثقة رسميًا
-            </span>
-            <h2 className="text-xl font-bold font-kufi text-slate-900 dark:text-white">
-              {typeText}
-            </h2>
-          </div>
-        </div>
-        <span className="text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300">
-          {cert.serial_number}
-        </span>
-      </div>
-
-      <div className="space-y-4 font-cairo">
-        <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
-          <User className="w-5 h-5 text-jcp-gold shrink-0 mt-0.5" />
-          <div>
-            <span className="text-xs text-slate-500">اسم الحاصل على الشهادة:</span>
-            <p className="font-bold text-base text-slate-900 dark:text-white">{participantName}</p>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
-          <BookOpen className="w-5 h-5 text-jcp-gold shrink-0 mt-0.5" />
-          <div>
-            <span className="text-xs text-slate-500">البرنامج التدريبي المعتمد:</span>
-            <p className="font-bold text-base text-slate-900 dark:text-white">{programTitle}</p>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
-          <Calendar className="w-5 h-5 text-jcp-gold shrink-0 mt-0.5" />
-          <div>
-            <span className="text-xs text-slate-500">تاريخ التحرير والإصدار:</span>
-            <p className="font-bold text-base text-slate-900 dark:text-white">{formattedDate}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-2">
-        <p className="text-xs text-slate-500 font-cairo">
-          صادرة عن الأكاديمية الحزبية — حزب المحافظين الأردني ومقيدة في سجلات الاعتماد الرسمي.
-        </p>
-      </div>
-    </div>
+    <CertificateView
+      serialNumber={cert.serial_number}
+      participantName={participantName}
+      programTitle={programTitle}
+      issueDate={formattedDate}
+      certificateType={cert.type as 'completion' | 'participation'}
+      qrDataUrl={qrDataUrl}
+      certificateId={cert.id}
+    />
   )
 }
 
