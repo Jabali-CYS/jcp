@@ -16,9 +16,11 @@ export default async function AdminProgramsPage() {
       title,
       status,
       created_at,
-      sessions ( count ),
-      applications ( count ),
-      enrollments ( count )
+      sessions (
+        id,
+        enrollments ( count )
+      ),
+      applications ( count )
     `)
     .order('created_at', { ascending: false })
 
@@ -85,9 +87,9 @@ export default async function AdminProgramsPage() {
                 </div>
                 
                 <div className="text-sm text-gray-500 dark:text-gray-400 font-cairo mb-6 space-y-1">
-                  <p>الجلسات التدريبية: {program.sessions?.[0]?.count || 0}</p>
+                  <p>الجلسات التدريبية: {program.sessions?.length || 0}</p>
                   <p>طلبات الالتحاق: {program.applications?.[0]?.count || 0}</p>
-                  <p>المسجلين المعتمدين: {program.enrollments?.[0]?.count || 0}</p>
+                  <p>المسجلين المعتمدين: {program.sessions?.reduce((acc: number, s: any) => acc + (s.enrollments?.[0]?.count || 0), 0) || 0}</p>
                   <p className="text-xs mt-2">تاريخ الإنشاء: {new Date(program.created_at).toLocaleDateString('ar-JO')}</p>
                 </div>
 

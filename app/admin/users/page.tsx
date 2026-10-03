@@ -1,13 +1,21 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { makeAdmin, demoteAdmin } from '../actions'
+import { makeAdmin, demoteAdmin, promoteUserById } from '../actions'
 
 export const metadata = {
   title: 'إدارة المستخدمين | JCP Academy',
 }
 
-export default async function AdminUsersPage() {
+interface AdminUsersPageProps {
+  searchParams?: Promise<{
+    success?: string
+    error?: string
+  }>
+}
+
+export default async function AdminUsersPage({ searchParams }: AdminUsersPageProps) {
+  const params = await searchParams
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -26,7 +34,6 @@ export default async function AdminUsersPage() {
   }
 
   // Use admin client to list all profiles with their roles.
-  // We explicitly select only non-sensitive fields.
   const adminClient = createAdminClient()
 
   const { data: profiles, error } = await adminClient
@@ -38,7 +45,25 @@ export default async function AdminUsersPage() {
     console.error('Error fetching profiles:', error)
   }
 
-  const rows = profiles ?? []
+  const rawRows = profiles ?? []
+
+  // Resolve user emails securely on server for display
+  const rows = await Promise.all(
+    rawRows.map(async (profile: any) => {
+      try {
+        const { data: userData } = await adminClient.auth.admin.getUserById(profile.id)
+        return {
+          ...profile,
+          email: userData?.user?.email || '—',
+        }
+      } catch {
+        return {
+          ...profile,
+          email: '—',
+        }
+      }
+    })
+  )
 
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8">
@@ -52,6 +77,21 @@ export default async function AdminUsersPage() {
           </p>
         </div>
 
+        {/* Status Alerts */}
+        {params?.success && (
+          <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-sm font-bold font-cairo flex items-center gap-2">
+            <span className="text-base">✓</span>
+            <span>{params.success}</span>
+          </div>
+        )}
+
+        {params?.error && (
+          <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-sm font-bold font-cairo flex items-center gap-2">
+            <span className="text-base">⚠️</span>
+            <span>{params.error}</span>
+          </div>
+        )}
+
         {/* Make Admin form */}
         <section
           aria-labelledby="make-admin-heading"
@@ -61,7 +101,7 @@ export default async function AdminUsersPage() {
             id="make-admin-heading"
             className="text-lg font-bold text-gray-900 dark:text-white font-kufi mb-4"
           >
-            ترقية مستخدم إلى مسؤول
+            ترقية مستخدم إلى مسؤول بالبريد الإلكتروني
           </h2>
           <form action={makeAdmin} className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
             <div className="flex-1">
@@ -80,7 +120,7 @@ export default async function AdminUsersPage() {
             </div>
             <button
               type="submit"
-              className="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg font-cairo transition-colors"
+              className="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-lg font-cairo transition-colors cursor-pointer"
             >
               ترقية إلى مسؤول
             </button>
@@ -93,7 +133,7 @@ export default async function AdminUsersPage() {
             id="users-table-heading"
             className="text-lg font-bold text-gray-900 dark:text-white font-kufi mb-4"
           >
-            قائمة المستخدمين
+            قائمة المستخدمين المسجلين
           </h2>
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="overflow-x-auto">
@@ -101,7 +141,8 @@ export default async function AdminUsersPage() {
                 <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
                   <tr>
                     <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">الاسم الكامل</th>
-                    <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">الدور</th>
+                    <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">البريد الإلكتروني</th>
+                    <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">الدور الحالي</th>
                     <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">تاريخ التسجيل</th>
                     <th scope="col" className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-kufi">الإجراءات</th>
                   </tr>
@@ -109,7 +150,7 @@ export default async function AdminUsersPage() {
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                   {rows.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-6 py-12 text-center text-gray-500 font-cairo">
+                      <td colSpan={5} className="px-6 py-12 text-center text-gray-500 font-cairo">
                         لا يوجد مستخدمون مسجلون.
                       </td>
                     </tr>
@@ -132,12 +173,15 @@ export default async function AdminUsersPage() {
                               )}
                             </span>
                           </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 font-cairo" dir="ltr">
+                            {profile.email}
+                          </td>
                           <td className="px-6 py-4">
-                            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold font-cairo ${
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold font-cairo ${
                               role === 'admin'
-                                ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
+                                ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
                                 : role === 'trainer'
-                                ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
+                                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                             }`}>
                               {role === 'admin' ? 'مسؤول' : role === 'trainer' ? 'مدرب' : 'متدرب'}
@@ -152,9 +196,19 @@ export default async function AdminUsersPage() {
                                 <input type="hidden" name="userId" value={profile.id} />
                                 <button
                                   type="submit"
-                                  className="px-3 py-1 text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 font-cairo transition-colors"
+                                  className="px-3 py-1.5 text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 font-cairo transition-colors cursor-pointer"
                                 >
                                   إزالة صلاحية المسؤول
+                                </button>
+                              </form>
+                            ) : !isAdmin && !isCurrentUser ? (
+                              <form action={promoteUserById}>
+                                <input type="hidden" name="userId" value={profile.id} />
+                                <button
+                                  type="submit"
+                                  className="px-3 py-1.5 text-xs font-bold text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 font-cairo transition-colors cursor-pointer"
+                                >
+                                  ترقية إلى مسؤول
                                 </button>
                               </form>
                             ) : (

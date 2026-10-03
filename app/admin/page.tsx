@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { ShieldCheck } from 'lucide-react'
 import ApplicationActionRow from './ApplicationActionRow'
 
 export const metadata = {
@@ -59,6 +60,19 @@ export default async function AdminDashboardPage() {
             <div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white font-kufi group-hover:text-gold-600 transition-colors">إصدار الشهادات</h2>
               <p className="text-gray-500 dark:text-gray-400 font-cairo text-sm mt-1">إصدار وتحميل شهادات التدريب</p>
+            </div>
+          </Link>
+
+          <Link href="/verify" className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center gap-4 hover:border-emerald-400 transition-colors group">
+            <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl flex items-center justify-center flex-shrink-0 text-emerald-600 dark:text-emerald-400">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white font-kufi group-hover:text-emerald-600 transition-colors">بوابة التحقق من الشهادات</h2>
+                <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded">/verify</span>
+              </div>
+              <p className="text-gray-500 dark:text-gray-400 font-cairo text-sm mt-1">التحقق الرقمي الفوري من صحة أي وثيقة أو شهادة برقمها التسلسلي</p>
             </div>
           </Link>
         </div>

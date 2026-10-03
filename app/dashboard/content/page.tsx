@@ -16,27 +16,50 @@ export default async function TraineeDigitalContentPage() {
     redirect('/login')
   }
 
-  // Fetch authorized digital content
-  const { data: contentData, error } = await supabase
-    .from('digital_content')
-    .select(`
-      id,
-      title,
-      file_url,
-      created_at,
-      program_id,
-      programs ( title )
-    `)
-    .order('created_at', { ascending: false })
+  // 1. Fetch the user's enrolled program IDs (active or completed enrollments only)
+  const { data: enrollmentData } = await supabase
+    .from('enrollments')
+    .select('sessions ( program_id )')
+    .eq('profile_id', user.id)
+    .in('status', ['active', 'completed'])
 
-  if (error) {
-    console.error('Error fetching digital content:', error)
+  // Extract unique program IDs the user has access to
+  const programIds: string[] = []
+  if (enrollmentData) {
+    for (const enr of enrollmentData) {
+      const sessions = Array.isArray(enr.sessions) ? enr.sessions : enr.sessions ? [enr.sessions] : []
+      for (const sess of sessions) {
+        if (sess?.program_id && !programIds.includes(sess.program_id)) {
+          programIds.push(sess.program_id)
+        }
+      }
+    }
   }
 
-  const contentList = (contentData || []) as any[]
+  // 2. Fetch authorized digital content — scoped strictly to enrolled programs
+  let contentData: any[] = []
+  if (programIds.length > 0) {
+    const { data, error } = await supabase
+      .from('digital_content')
+      .select(`
+        id,
+        title,
+        file_url,
+        created_at,
+        program_id,
+        programs ( title )
+      `)
+      .in('program_id', programIds)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching digital content:', error)
+    }
+    contentData = data || []
+  }
 
   // Group content by program
-  const groupedContent = contentList.reduce((acc, item) => {
+  const groupedContent = contentData.reduce((acc: Record<string, any[]>, item: any) => {
     let programTitle = 'برنامج غير محدد'
     if (item.programs) {
       if (Array.isArray(item.programs) && item.programs.length > 0) {

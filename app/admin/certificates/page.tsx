@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowRight, Award } from 'lucide-react'
+import { ArrowRight, Award, ShieldCheck } from 'lucide-react'
 import { CertificateIssuer } from './CertificateIssuer'
 
 export const metadata = {
@@ -44,18 +44,29 @@ export default async function AdminCertificatesPage() {
   return (
     <div className="min-h-screen pt-32 pb-20 bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div>
-          <Link href="/admin" className="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 font-bold font-cairo mb-6 gap-2">
-            <ArrowRight className="w-4 h-4" />
-            العودة للوحة التحكم
-          </Link>
-          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white font-kufi flex items-center gap-3">
-            <Award className="w-8 h-8 text-gold-500" />
-            إصدار الشهادات
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400 font-cairo">
-            إصدار وتنزيل الشهادات للمتدربين.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <Link href="/admin" className="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 font-bold font-cairo mb-4 gap-2 text-sm">
+              <ArrowRight className="w-4 h-4" />
+              العودة للوحة التحكم
+            </Link>
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white font-kufi flex items-center gap-3">
+              <Award className="w-8 h-8 text-gold-500" />
+              إصدار الشهادات
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400 font-cairo">
+              إصدار وتنزيل الشهادات للمتدربين.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <Link
+              href="/verify"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold font-cairo rounded-xl text-sm hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors shadow-sm"
+            >
+              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <span>بوابة التحقق من الشهادات (/verify)</span>
+            </Link>
+          </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">

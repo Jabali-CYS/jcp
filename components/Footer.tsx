@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { Globe, MapPin, Phone } from "lucide-react";
+import Image from "next/image";
+import { Globe, MapPin, Phone, QrCode } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
 import { FacebookIcon } from "./icons/FacebookIcon";
 
@@ -39,12 +40,32 @@ export default function Footer() {
             <p className="text-slate-300 font-almarai leading-relaxed max-w-md">
               {t.vision}
             </p>
+
+            {/* Site QR Mini Card */}
+            <div className="mt-6 flex items-center gap-3 p-3 bg-slate-800/80 rounded-2xl border border-slate-700/80 max-w-xs shadow-md">
+              <div className="bg-white p-1 rounded-xl shrink-0">
+                <Image
+                  src="/jcpacademy-qr.png"
+                  alt="QR Code"
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 object-contain"
+                />
+              </div>
+              <div className="text-xs">
+                <p className="font-bold text-white font-almarai">{isAr ? "امسح الرمز للدخول السريع" : "Scan for Quick Access"}</p>
+                <Link href="/qr" className="text-jcp-gold hover:underline font-cairo mt-1 inline-block font-semibold">
+                  {isAr ? "عرض الرمز بالحجم الكامل ←" : "View Full QR ←"}
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Links */}
           <div>
             <h4 className="font-bold text-lg mb-6 font-almarai border-b border-slate-700 pb-2 inline-block">{t.quickLinks}</h4>
             <ul className="space-y-3 font-almarai text-slate-300">
+              <li><Link href="/qr" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><QrCode size={16} /> {isAr ? "رمز QR الرسمي للمنصة" : "Official Academy QR Code"}</Link></li>
               <li><a href="https://conservativesparty.jo/about/" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {isAr ? "الموقع الرسمي للحزب" : "Official Party Website"}</a></li>
               <li><a href="https://parties.iec.jo/%D8%A7%D9%84%D8%A7%D8%AD%D8%B2%D8%A7%D8%A8/almohfden" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {t.iec}</a></li>
               <li><a href="https://moppa.gov.jo" target="_blank" rel="noopener noreferrer" className="hover:text-jcp-gold transition-colors flex items-center gap-2"><Globe size={16} /> {t.politicalMinistry}</a></li>

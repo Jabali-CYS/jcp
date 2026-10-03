@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/components/LanguageProvider";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { createClient } from "@/lib/supabase/server";
 
 const readexPro = Readex_Pro({
   variable: "--font-readex-pro",
@@ -53,7 +54,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let initialUser = null;
+  let initialIsAdmin = false;
+
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      initialUser = { id: user.id, email: user.email };
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      initialIsAdmin = roleData?.role === 'admin';
+    }
+  } catch {
+    // Fallback during static prerendering
+  }
+
   return (
     <html
       lang="ar"
@@ -76,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className="min-h-full flex flex-col font-readex bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
         <LanguageProvider>
           <ThemeProvider>
-            <Header />
+            <Header initialUser={initialUser} initialIsAdmin={initialIsAdmin} />
             <main className="flex-1">
               {children}
             </main>

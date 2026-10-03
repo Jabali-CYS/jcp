@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, CheckCircle, Clock, XCircle, BookOpen, FileText, Award, User, ClipboardList, Shield, ArrowLeft } from 'lucide-react'
+import { logout } from '@/app/auth/actions'
+import { Calendar, CheckCircle, Clock, XCircle, BookOpen, FileText, Award, User, ClipboardList, Shield, ArrowLeft, LogOut } from 'lucide-react'
 
 export const metadata = {
   title: 'لوحة المعلومات | JCP Academy',
@@ -138,6 +139,15 @@ export default async function DashboardPage() {
               <User className="w-4 h-4" />
               الملف الشخصي
             </Link>
+            <form action={logout}>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 rounded-xl text-red-600 dark:text-red-400 font-bold font-cairo hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors text-sm shadow-sm"
+              >
+                <LogOut className="w-4 h-4" />
+                تسجيل الخروج
+              </button>
+            </form>
           </div>
         </div>
 

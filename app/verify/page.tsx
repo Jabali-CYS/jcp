@@ -39,6 +39,8 @@ async function VerifyContent({ serial }: { serial?: string }) {
     )
   }
 
+  // Use admin client strictly on server for public verification by exact serial number.
+  // This allows anonymous public verification without opening certificates table broad RLS.
   const supabase = createAdminClient()
 
   // Query certificate by serial number safely on server
