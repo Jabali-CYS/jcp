@@ -27,14 +27,26 @@ export function CertificateIssuer({
           </div>
           <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{existingCertificate.serial_number}</span>
         </div>
-        <a 
-          href={`/api/certificates/${existingCertificate.id}/download`}
-          download
-          className="inline-flex items-center gap-2 bg-navy-800 hover:bg-navy-700 text-white px-4 py-2 rounded-lg text-sm font-bold font-cairo transition-colors w-full justify-center"
-        >
-          <Download className="w-4 h-4 text-gold-400" />
-          تحميل PDF
-        </a>
+        <div className="flex items-center gap-2 w-full">
+          <a 
+            href={`/certificates/${existingCertificate.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-xs font-black font-cairo transition-all shadow-sm"
+          >
+            <Award className="w-3.5 h-3.5" />
+            عرض وتصدير
+          </a>
+          <a 
+            href={`/certificates/${existingCertificate.id}?export=1`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-1.5 bg-[#0e1e38] hover:bg-[#162e54] text-white px-3 py-2 rounded-lg text-xs font-bold font-cairo transition-all"
+          >
+            <Download className="w-3.5 h-3.5 text-amber-400" />
+            PDF
+          </a>
+        </div>
       </div>
     )
   }

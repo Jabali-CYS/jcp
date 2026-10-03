@@ -9,7 +9,7 @@ export const metadata = {
   description: 'بوابة التحقق الرسمية من صحة الشهادات الصادرة عن الأكاديمية الحزبية لحزب المحافظين الأردني.',
 }
 
-async function VerifyContent({ serial }: { serial?: string }) {
+async function VerifyContent({ serial, autoExport }: { serial?: string; autoExport?: boolean }) {
   if (!serial) {
     return (
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-800 text-center max-w-xl mx-auto space-y-4">
@@ -115,6 +115,7 @@ async function VerifyContent({ serial }: { serial?: string }) {
       certificateType={cert.type as 'completion' | 'participation'}
       qrDataUrl={qrDataUrl}
       certificateId={cert.id}
+      autoExport={autoExport}
     />
   )
 }
@@ -122,24 +123,27 @@ async function VerifyContent({ serial }: { serial?: string }) {
 export default async function VerifyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ serial?: string }>
+  searchParams: Promise<{ serial?: string; export?: string; print?: string }>
 }) {
-  const { serial } = await searchParams
+  const { serial, export: exportParam, print: printParam } = await searchParams
+  const shouldAutoExport = exportParam === '1' || printParam === '1'
 
   return (
-    <div className="min-h-screen pt-32 pb-20 bg-slate-50 dark:bg-slate-950 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <header className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold text-jcp-navy dark:text-white font-kufi">
-            التحقق من صحة الوثائق والشهادات
-          </h1>
-          <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-cairo">
-            نظام التوثيق الرقمي للأكاديمية الحزبية — حزب المحافظين الأردني
-          </p>
-        </header>
+    <div className="min-h-screen pt-24 sm:pt-28 pb-16 bg-slate-50/70 dark:bg-slate-950 px-3 sm:px-6 lg:px-8 transition-colors flex flex-col justify-center">
+      <div className="w-full max-w-5xl mx-auto">
+        {!serial && (
+          <header className="text-center space-y-2 mb-8">
+            <h1 className="text-3xl font-extrabold text-jcp-navy dark:text-white font-kufi">
+              التحقق من صحة الوثائق والشهادات
+            </h1>
+            <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-cairo">
+              نظام التوثيق الرقمي للأكاديمية الحزبية — حزب المحافظين الأردني
+            </p>
+          </header>
+        )}
 
-        <Suspense fallback={<div className="text-center font-cairo py-12">جاري التحقق...</div>}>
-          <VerifyContent serial={serial} />
+        <Suspense fallback={<div className="text-center font-cairo py-24 text-slate-600 dark:text-slate-300 font-bold">جاري تحميل وتوثيق الشهادة الرسمية...</div>}>
+          <VerifyContent serial={serial} autoExport={shouldAutoExport} />
         </Suspense>
       </div>
     </div>

@@ -15,15 +15,6 @@ export async function GET(
     const { id } = await params
     const supabase = await createClient()
 
-    // 1. Authenticate user
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json(
-        { error: 'يجب تسجيل الدخول لتحميل الشهادة.' },
-        { status: 401 }
-      )
-    }
-
     // 2. Fetch certificate data with enrollment, profile, and session program relations
     const { data: cert, error } = await supabase
       .from('certificates')
@@ -60,24 +51,6 @@ export async function GET(
       )
     }
 
-    // 4. Verify Authorization: Must be owner (trainee) or Admin
-    const isOwner = enrollment.profile_id === user.id
-    if (!isOwner) {
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('role', 'admin')
-        .maybeSingle()
-
-      if (!roleData) {
-        return NextResponse.json(
-          { error: 'غير مصرح لك بتحميل هذه الشهادة.' },
-          { status: 403 }
-        )
-      }
-    }
-
     const profile = Array.isArray(enrollment.profiles) ? enrollment.profiles[0] : enrollment.profiles
     const sessionObj = Array.isArray(enrollment.sessions) ? enrollment.sessions[0] : enrollment.sessions
     const programObj = Array.isArray(sessionObj?.programs) ? sessionObj?.programs[0] : sessionObj?.programs
@@ -107,6 +80,14 @@ export async function GET(
       browserBinding = (cfContext?.env as Record<string, any>)?.BROWSER
     } catch (cfErr) {
       console.warn('Unable to get Cloudflare BROWSER binding directly:', cfErr)
+    }
+
+    if (!browserBinding) {
+      // Gracefully redirect to the visual certificate with ?export=1 so the browser opens the native high-quality PDF dialog
+      const targetUrl = new URL(`/verify`, request.url)
+      targetUrl.searchParams.set('serial', cert.serial_number)
+      targetUrl.searchParams.set('export', '1')
+      return NextResponse.redirect(targetUrl, 302)
     }
 
     // 6. Generate PDF via Cloudflare Browser Run

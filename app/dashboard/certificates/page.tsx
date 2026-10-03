@@ -102,22 +102,22 @@ export default async function TraineeCertificatesPage() {
                       
                       <div className="flex items-center gap-2">
                         <Link 
-                          href={`/verify?serial=${encodeURIComponent(cert.serial_number)}`}
-                          className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 px-3.5 py-2 rounded-lg text-sm font-bold font-cairo transition-all border border-slate-200 dark:border-slate-600"
-                          title="استعراض الشهادة الرسمية"
+                          href={`/certificates/${cert.id}`}
+                          className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-sm font-black font-cairo transition-all shadow-md shadow-amber-500/10"
+                          title="استعراض الشهادة وتصديرها"
                         >
-                          <Eye className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                          <span>استعراض</span>
+                          <Eye className="w-4 h-4" />
+                          <span>عرض وتصدير</span>
                         </Link>
 
-                        <a 
-                          href={`/api/certificates/${cert.id}/download`}
-                          download
-                          className="inline-flex items-center gap-1.5 bg-jcp-navy hover:bg-opacity-90 text-white px-3.5 py-2 rounded-lg text-sm font-bold font-cairo transition-all shadow-sm"
+                        <Link 
+                          href={`/certificates/${cert.id}?export=1`}
+                          className="inline-flex items-center gap-1.5 bg-[#0e1e38] hover:bg-opacity-90 text-white px-3.5 py-2 rounded-xl text-sm font-bold font-cairo transition-all border border-[#0e1e38]"
+                          title="تصدير كـ PDF"
                         >
-                          <Download className="w-4 h-4 text-jcp-gold" />
+                          <Download className="w-4 h-4 text-[#c5a059]" />
                           <span>PDF</span>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
