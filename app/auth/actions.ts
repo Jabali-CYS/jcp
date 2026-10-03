@@ -136,6 +136,12 @@ export async function signup(formData: FormData) {
     }
 
     if (data.user) {
+      // Supabase Email Enumeration Protection:
+      // When a user already exists, Supabase returns data.user with an empty identities array []
+      if (data.user.identities && data.user.identities.length === 0) {
+        return { error: 'البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول أو استعادة كلمة المرور.' }
+      }
+
       let adminClient: ReturnType<typeof createAdminClient> | null = null
       try {
         if (getServerEnv('SUPABASE_SERVICE_ROLE_KEY')) {
