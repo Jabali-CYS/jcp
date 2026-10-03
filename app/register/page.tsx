@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, UserPlus, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signup } from '@/app/auth/actions';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,6 +32,9 @@ export default function RegisterPage() {
     } else if (result?.emailConfirmationRequired) {
       setSuccessMessage(result.message || 'تم إنشاء الحساب بنجاح! يرجى مراجعة بريدك الإلكتروني لتأكيد الحساب قبل تسجيل الدخول.');
       setIsLoading(false);
+    } else {
+      router.push('/dashboard');
+      router.refresh();
     }
   };
 
