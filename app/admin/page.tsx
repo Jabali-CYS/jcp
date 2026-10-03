@@ -68,10 +68,7 @@ export default async function AdminDashboardPage() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white font-kufi group-hover:text-emerald-600 transition-colors">بوابة التحقق من الشهادات</h2>
-                <span className="text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded">/verify</span>
-              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white font-kufi group-hover:text-emerald-600 transition-colors">بوابة التحقق من الشهادات</h2>
               <p className="text-gray-500 dark:text-gray-400 font-cairo text-sm mt-1">التحقق الرقمي الفوري من صحة أي وثيقة أو شهادة برقمها التسلسلي</p>
             </div>
           </Link>

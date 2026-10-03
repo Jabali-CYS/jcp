@@ -47,9 +47,8 @@ export default async function AdminLayout({
               <Link href="/admin/certificates" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 font-kufi shrink-0">
                 الشهادات
               </Link>
-              <Link href="/verify" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:border-emerald-300 dark:text-emerald-400 dark:hover:text-emerald-300 font-kufi shrink-0 gap-1.5">
-                <span>التحقق من الشهادات</span>
-                <span className="text-[11px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 px-1.5 py-0.5 rounded font-mono">/verify</span>
+              <Link href="/verify" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:border-emerald-300 dark:text-emerald-400 dark:hover:text-emerald-300 font-kufi shrink-0">
+                التحقق من الشهادات
               </Link>
               <Link href="/admin/audit" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 font-kufi shrink-0">
                 سجل التدقيق

@@ -64,7 +64,7 @@ export default async function AdminCertificatesPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold font-cairo rounded-xl text-sm hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors shadow-sm"
             >
               <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              <span>بوابة التحقق من الشهادات (/verify)</span>
+              <span>بوابة التحقق من الشهادات</span>
             </Link>
           </div>
         </div>
