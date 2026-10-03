@@ -73,17 +73,17 @@ export default function ApplicationForm({ programId, existingApplication }: { pr
           type="button"
           onClick={handleReapply}
           disabled={isPending}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white text-sm font-bold rounded-xl shadow-md transition-all disabled:opacity-50 font-cairo hover:shadow-lg"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#0D2040] hover:bg-[#162e54] active:bg-[#09152b] text-white text-sm font-black rounded-xl shadow-lg transition-all disabled:opacity-50 font-cairo hover:shadow-xl cursor-pointer"
         >
           {isPending ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>جاري إعادة التقديم...</span>
+              <Loader2 className="w-4 h-4 animate-spin text-white" />
+              <span className="text-white">جاري إعادة التقديم...</span>
             </>
           ) : (
             <>
-              <RefreshCw className="w-4 h-4" />
-              <span>إعادة التقديم الآن</span>
+              <RefreshCw className="w-4 h-4 text-[#C8A65E]" />
+              <span className="text-white">إعادة التقديم الآن</span>
             </>
           )}
         </button>
@@ -128,12 +128,12 @@ export default function ApplicationForm({ programId, existingApplication }: { pr
         <button
           type="submit"
           disabled={isPending}
-          className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed font-cairo shadow-sm"
+          className="w-full flex justify-center items-center py-3.5 px-4 text-sm font-black rounded-xl text-white bg-[#0D2040] hover:bg-[#162e54] active:bg-[#09152b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0D2040] transition-all disabled:opacity-70 disabled:cursor-not-allowed font-cairo shadow-md hover:shadow-lg cursor-pointer"
         >
           {isPending ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className="w-5 h-5 animate-spin text-white" />
           ) : (
-            'تقديم الطلب الآن'
+            <span className="text-white">تقديم الطلب الآن</span>
           )}
         </button>
       </form>

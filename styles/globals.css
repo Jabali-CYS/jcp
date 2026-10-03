@@ -6,6 +6,17 @@
   --color-jcp-green: #007A3D;
   --color-jcp-red: #CE1126;
   --color-jcp-gold: #C8A65E;
+
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #2563eb;
+  --color-primary-600: #0D2040;
+  --color-primary-700: #09152b;
+  --color-primary-800: #060e1c;
+  --color-primary-900: #040810;
   
   --font-readex: var(--font-readex-pro), sans-serif;
   --font-almarai: var(--font-almarai), sans-serif;
