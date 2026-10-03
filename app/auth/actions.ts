@@ -123,6 +123,7 @@ export async function signup(formData: FormData) {
       }
     }
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jcpacademy.com'
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -130,6 +131,7 @@ export async function signup(formData: FormData) {
         data: {
           full_name: fullName,
         },
+        emailRedirectTo: `${siteUrl}/auth/callback`,
       },
     })
 
