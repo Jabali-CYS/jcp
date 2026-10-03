@@ -17,6 +17,7 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ initialData }: ProfileFormProps) {
+  const [fullName, setFullName] = useState(initialData.full_name);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -74,7 +75,8 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                   type="text"
                   name="full_name"
                   required
-                  defaultValue={initialData.full_name}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value.replace(/[\d\u0660-\u0669]/g, ''))}
                   className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-transparent dark:text-white"
                 />
               </div>

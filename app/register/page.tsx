@@ -23,6 +23,19 @@ export default function RegisterPage() {
     setError(null);
     setSuccessMessage(null);
     
+    if (/[\d\u0660-\u0669]/.test(fullName)) {
+      setError('الاسم يجب أن يحتوي على أحرف نصية فقط دون أي أرقام.');
+      setIsLoading(false);
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError('كلمة المرور يجب أن تكون قوية وتستوفي جميع الشروط: 8 خانات، حرف كبير، حرف صغير، رقم، ورمز خاص.');
+      setIsLoading(false);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const result = await signup(formData);
     
@@ -72,6 +85,17 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* Spam notice alert */}
+            <div className="p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs rounded-xl flex items-start gap-2.5 font-cairo">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+              <div>
+                <span className="font-bold">تنبيه هام للبريد الإلكتروني:</span>
+                <p className="mt-0.5 text-amber-700 dark:text-amber-300/90 leading-relaxed">
+                  إذا لم تجد رسالة التأكيد في صندوق الوارد (Inbox)، يرجى مراجعة مجلد الرسائل غير المرغوب فيها (Spam / Junk Mail) وتأكيد الحساب من هناك.
+                </p>
+              </div>
+            </div>
+
             <div className="text-center font-cairo">
               <Link
                 href="/login"
@@ -98,12 +122,15 @@ export default function RegisterPage() {
                     name="fullName"
                     required
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={(e) => setFullName(e.target.value.replace(/[\d\u0660-\u0669]/g, ''))}
                     className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-transparent dark:text-white transition-colors"
-                    placeholder="الاسم الكامل"
+                    placeholder="الاسم الكامل (أحرف فقط بدون أرقام)"
                     disabled={isLoading}
                   />
                 </div>
+                <p className="mt-1 text-[11px] text-gray-500 dark:text-gray-400 font-cairo">
+                  يُقبل فقط الاسم النصي بدون أرقام
+                </p>
               </div>
 
               <div>
@@ -149,9 +176,33 @@ export default function RegisterPage() {
                     disabled={isLoading}
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 font-cairo">
-                  8 أحرف كحد أدنى
-                </p>
+
+                {/* Password strength real-time guidance */}
+                <div className="mt-2.5 p-3 bg-gray-50 dark:bg-gray-900/60 rounded-xl border border-gray-200/70 dark:border-gray-700/70 text-xs font-cairo space-y-1.5">
+                  <div className="font-semibold text-gray-700 dark:text-gray-300 mb-1">شروط كلمة المرور القوية:</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
+                    <div className={`flex items-center gap-1.5 ${password.length >= 8 ? 'text-green-600 dark:text-green-400 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span>{password.length >= 8 ? '✓' : '○'}</span>
+                      <span>8 خانات كحد أدنى</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 ${/[A-Z]/.test(password) ? 'text-green-600 dark:text-green-400 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span>{/[A-Z]/.test(password) ? '✓' : '○'}</span>
+                      <span>حرف كبير (A-Z)</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 ${/[a-z]/.test(password) ? 'text-green-600 dark:text-green-400 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span>{/[a-z]/.test(password) ? '✓' : '○'}</span>
+                      <span>حرف صغير (a-z)</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 ${/\d/.test(password) ? 'text-green-600 dark:text-green-400 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span>{/\d/.test(password) ? '✓' : '○'}</span>
+                      <span>رقم واحد على الأقل (0-9)</span>
+                    </div>
+                    <div className={`flex items-center gap-1.5 sm:col-span-2 ${/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password) ? 'text-green-600 dark:text-green-400 font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <span>{/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password) ? '✓' : '○'}</span>
+                      <span>رمز خاص واحد على الأقل (@, #, $, %, !, ...)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

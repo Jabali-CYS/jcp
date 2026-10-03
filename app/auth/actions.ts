@@ -27,7 +27,7 @@ export async function login(formData: FormData) {
       const status = (error as any).status
 
       if (code === 'email_not_confirmed' || msg.includes('email not confirmed')) {
-        return { error: 'البريد الإلكتروني لم يتم تأكيده بعد. يرجى مراجعة بريدك الإلكتروني لتفعيل الحساب.' }
+        return { error: 'البريد الإلكتروني لم يتم تأكيده بعد. يرجى مراجعة صندوق الوارد ومجلد الرسائل غير المرغوب فيها (Spam / Junk) لتفعيل الحساب.' }
       }
 
       if (code === 'invalid_credentials' || msg.includes('invalid login credentials')) {
@@ -110,8 +110,17 @@ export async function signup(formData: FormData) {
       return { error: 'جميع الحقول مطلوبة' }
     }
 
-    if (password.length < 8) {
-      return { error: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' }
+    // Name must be letters only without numbers
+    if (/[\d\u0660-\u0669]/.test(fullName)) {
+      return { error: 'الاسم يجب أن يحتوي على أحرف نصية فقط دون أي أرقام' }
+    }
+
+    // Strong password criteria: 8+ chars, 1 uppercase, 1 lowercase, 1 digit, 1 special character
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/
+    if (!passwordRegex.test(password)) {
+      return { 
+        error: 'كلمة المرور يجب أن تتكون من 8 خانات على الأقل، وتحتوي على حرف كبير (A-Z)، وحرف صغير (a-z)، ورقم (0-9)، ورمز خاص (@, #, $, %, ...).' 
+      }
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -191,7 +200,7 @@ export async function signup(formData: FormData) {
         return {
           success: true,
           emailConfirmationRequired: true,
-          message: 'تم إنشاء الحساب بنجاح! يرجى مراجعة بريدك الإلكتروني لتأكيد الحساب قبل تسجيل الدخول.',
+          message: 'تم إنشاء الحساب بنجاح! يرجى مراجعة بريدك الإلكتروني (بما في ذلك مجلد الرسائل غير المرغوب فيها Spam / Junk) لتأكيد الحساب قبل تسجيل الدخول.',
         }
       }
     }

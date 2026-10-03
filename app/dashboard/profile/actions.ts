@@ -20,6 +20,11 @@ export async function updateProfile(formData: FormData) {
     return { error: 'الاسم الكامل مطلوب' };
   }
 
+  // Reject names with digits
+  if (/[\d\u0660-\u0669]/.test(fullName)) {
+    return { error: 'الاسم يجب أن يحتوي على أحرف نصية فقط دون أي أرقام' };
+  }
+
   let age: number | null = null;
   if (ageStr) {
     age = parseInt(ageStr, 10);
